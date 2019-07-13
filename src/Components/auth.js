@@ -4,14 +4,17 @@ import {
   Button,
   Step,
   Stepper,
-  StepButton
+  StepButton,
+  Collapse
 } from "@material-ui/core";
 import { Field } from "react-final-form";
 
-import { StyledCollapse, AuthCard, StyledTextField, MainCard, StyledGrid } from '../StyledComponents/auth/'
+import { StyledCollapse, AuthCard, StyledTextField, MainCard, StyledGrid } from '../StyledComponents/components/auth/'
 import { axiosAPI } from '../Utils/axios'
-import { STEP_CLIENT } from '../Constants'
+import { STEP_OPERATOR } from '../Constants'
 import StepContents from '../Steps/step'
+import TypeUploadData from './type-upload-data'
+import Summary from './summary'
 
 class Auth extends Component {
   state = {
@@ -21,7 +24,7 @@ class Auth extends Component {
   }
 
   async componentDidMount() {
-    const auth = await axiosAPI({ path: 'operator' })
+    // const auth = await axiosAPI({ path: 'operator' })
     this.setState({ openAuth: false, openStep: true })
   }
 
@@ -29,7 +32,7 @@ class Auth extends Component {
 
   render () {
     const { openAuth, openStep, activeStep } = this.state
-    const { finalformApi, valuesFinalForm } = this.props
+    const { finalformApi, valuesFinalForm, mutatorsFinalForm } = this.props
 
     return (
       <>
@@ -64,25 +67,38 @@ class Auth extends Component {
         </StyledCollapse>
         <StyledCollapse in={openStep}>
 
-          <Typography component="h1" variant="h4" align="center">
-            Заявление на подключение роуминга между контрагентами
-          </Typography>
-          <Stepper nonLinear activeStep={activeStep}>
-            {STEP_CLIENT.map((label, index) => (
-              <Step key={label}>
-                <StepButton onClick={this.handleStep(index)}>
-                  {label}
-                </StepButton>
-              </Step>
-            ))}
-          </Stepper>
-
           <MainCard>
-            <StepContents
-              activeStep={activeStep}
-              finalformApi={finalformApi}
-              valuesFinalForm={valuesFinalForm}
-            />
+            <Typography component="h1" variant="h4" align="center">
+              Заявление на подключение роуминга между контрагентами
+            </Typography>
+            <Stepper nonLinear activeStep={activeStep}>
+              {STEP_OPERATOR.map((label, index) => (
+                <Step key={label}>
+                  <StepButton onClick={this.handleStep(index)}>
+                    {label}
+                  </StepButton>
+                </Step>
+              ))}
+            </Stepper>
+
+            <Collapse in={activeStep < 2}>
+              <TypeUploadData
+                activeStep={activeStep}
+                type='Operator'
+              />
+
+              <StepContents
+                type='Operator'
+                activeStep={activeStep}
+                finalformApi={finalformApi}
+                valuesFinalForm={valuesFinalForm}
+                mutatorsFinalForm={mutatorsFinalForm}
+              />
+
+            </Collapse>
+            <Collapse in={activeStep === 2}>
+              <Summary />
+            </Collapse>
 
             <StyledGrid>
               <Button

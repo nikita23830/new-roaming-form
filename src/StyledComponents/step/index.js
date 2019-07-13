@@ -34,6 +34,7 @@ export const MainCard = styled(Card)`
 
 export const GridButton = styled(Grid)`
  && {
+   width: 600px;
    margin-top: 20px;
    display: flex;
    justify-content: space-between;

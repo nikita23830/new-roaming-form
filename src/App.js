@@ -6,10 +6,11 @@ import styled from 'styled-components'
 import arrayMutators from 'final-form-arrays'
 
 import { FormDiv, Div } from './StyledComponents/'
+import { DEFAULT_OBJECT } from './Constants'
 
 import Auth from './Components/auth'
 import State from './Components/state'
-import FirstStepClient from './Steps/first-step-client'
+import Client from './Components/client'
 
 class App extends Component {
   state = {
@@ -34,88 +35,97 @@ class App extends Component {
     const { activePage } = this.state;
 
     return (
-      <>
-        <Paper square>
-          <Tabs
-            value={activePage}
-            variant="fullWidth"
-            indicatorColor="primary"
-            textColor="primary"
-          >
-            <Tab
-              icon={<Person />}
-              label="Клиентам"
-              value={0}
-              onClick={this.handleChange(0)}
-            />
-            <Tab
-              icon={<Business />}
-              label="Операторам"
-              value={1}
-              onClick={this.handleChange(1)}
-            />
-            <Tab
-              icon={<SignalCellularAlt />}
-              label="Состояние роуминга"
-              value={2}
-              onClick={this.handleChange(2)}
-            />
-          </Tabs>
-        </Paper>
+      <Form
+        onSubmit={this.onSubmitFinalForm}
+        decorators={[this.bindFormApi]}
+        mutators={{
+          ...arrayMutators
+        }}
+        initialValues={{
+          senderClient: [{...DEFAULT_OBJECT}],
+          senderOperator: [{...DEFAULT_OBJECT}],
+          receiverClient: [{...DEFAULT_OBJECT}],
+          receiverOperator: [{...DEFAULT_OBJECT}],
+        }}
+        render={({
+          handleSubmit,
+          reset,
+          submitting,
+          pristine,
+          values,
+          form,
+          errors,
+          touched,
+        }) => {
+          const { change, mutators } = form
 
-        <Form
-          onSubmit={this.onSubmitFinalForm}
-          decorators={[this.bindFormApi]}
-          mutators={{
-            ...arrayMutators
-          }}
-          initialValues={{
-            senderClient: [{}],
-            receiverClient: [{}],
-            senderOperator: [{}],
-            receiverOperator: [{}],
-          }}
-          render={({
-            handleSubmit,
-            reset,
-            submitting,
-            pristine,
-            values,
-            form,
-            errors,
-            touched
-          }) => {
-            const { change } = form
+          return (
+            <>
+              <Paper square>
+                <Tabs
+                  value={activePage}
+                  variant="fullWidth"
+                  indicatorColor="primary"
+                  textColor="primary"
+                >
+                  <Tab
+                    icon={<Person />}
+                    label="Клиентам"
+                    value={0}
+                    onClick={this.handleChange(0)}
+                  />
+                  <Tab
+                    icon={<Business />}
+                    label="Операторам"
+                    value={1}
+                    onClick={this.handleChange(1)}
+                  />
+                  <Tab
+                    icon={<SignalCellularAlt />}
+                    label="Состояние роуминга"
+                    value={2}
+                    onClick={this.handleChange(2)}
+                  />
+                </Tabs>
+              </Paper>
 
-            return (
               <FormDiv onSubmit={handleSubmit}>
                 <Div>
 
                   {getStepContent({
                     activePage,
                     values,
+                    mutators,
                     formApi: this.formApi,
                   })}
 
                 </Div>
               </FormDiv>
-            )
-          }}
-        />
-
-      </>
+            </>
+          )
+        }}
+      />
     );
   }
 }
 
-const getStepContent = ({ activePage, values, formApi }) => {
+const getStepContent = ({ activePage, values, mutators, formApi }) => {
+  // formApi.change('senderClient', [{}]);
+  // formApi.change('receiverClient', [{}]);
+  // formApi.change('senderOperator', [{}]);
+  // formApi.change('receiverOperator', [{}]);
   switch (activePage) {
     case 0:
-      return <FirstStepClient />;
+      return <Client
+        finalformApi={formApi}
+        valuesFinalForm={values}
+        mutatorsFinalForm={mutators}
+      />;
     case 1:
       return <Auth
         finalformApi={formApi}
         valuesFinalForm={values}
+        mutatorsFinalForm={mutators}
       />;
     case 2:
       return <State />;
