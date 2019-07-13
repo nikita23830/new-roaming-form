@@ -1,6 +1,7 @@
 import styled from 'styled-components'
-import { Card, Collapse, Grid } from '@material-ui/core';
+import { Card, Collapse, Grid, Avatar } from '@material-ui/core';
 import { TextField } from 'final-form-material-ui'
+import { amber } from '@material-ui/core/colors';
 
 export const AuthCard = styled(Card)`
  && {
@@ -49,5 +50,36 @@ export const StyledCollapse = styled(Collapse)`
     display: flex;
     justify-content: center;
     align-items: center;
+  }
+`
+
+export const StyledGrid = styled(Grid)`
+ && {
+   display: flex;
+   justify-content: space-between;
+   flex-direction: row;
+   align-items: center;
+  }
+`
+
+export const Styledinput = styled.input`
+  && {
+    display: none;
+  }
+`
+
+export const Styledp = styled.p`
+  && {
+    width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+`
+
+export const StyledAvatar = styled(Avatar)`
+  && {
+    background-color: #fff;
+    border: 1px solid #6a1b9a;
   }
 `

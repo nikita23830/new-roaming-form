@@ -14,7 +14,7 @@ import Client from './Components/client'
 
 class App extends Component {
   state = {
-    activePage: 0
+    activePage: 1
   };
 
   handleChange = value => e => {
@@ -117,6 +117,7 @@ const getStepContent = ({ activePage, values, mutators, formApi }) => {
   switch (activePage) {
     case 0:
       return <Client
+        name='Client'
         finalformApi={formApi}
         valuesFinalForm={values}
         mutatorsFinalForm={mutators}

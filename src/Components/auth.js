@@ -9,11 +9,12 @@ import {
 } from "@material-ui/core";
 import { Field } from "react-final-form";
 
-import { StyledCollapse, AuthCard, StyledTextField, MainCard, StyledGrid } from '../StyledComponents/components/auth/'
+import { StyledCollapse, AuthCard, StyledTextField, MainCard, StyledGrid, StyledCollapseClient } from '../StyledComponents/components/auth/'
 import { axiosAPI } from '../Utils/axios'
 import { STEP_OPERATOR } from '../Constants'
 import StepContents from '../Steps/step'
 import TypeUploadData from './type-upload-data'
+import Client from './client'
 import Summary from './summary'
 
 class Auth extends Component {
@@ -24,7 +25,7 @@ class Auth extends Component {
   }
 
   async componentDidMount() {
-    // const auth = await axiosAPI({ path: 'operator' })
+    const auth = await axiosAPI({ path: 'operator' })
     this.setState({ openAuth: false, openStep: true })
   }
 
@@ -65,58 +66,16 @@ class Auth extends Component {
             </Button>
           </AuthCard>
         </StyledCollapse>
-        <StyledCollapse in={openStep}>
+        <StyledCollapseClient in={openStep}>
 
-          <MainCard>
-            <Typography component="h1" variant="h4" align="center">
-              Заявление на подключение роуминга между контрагентами
-            </Typography>
-            <Stepper nonLinear activeStep={activeStep}>
-              {STEP_OPERATOR.map((label, index) => (
-                <Step key={label}>
-                  <StepButton onClick={this.handleStep(index)}>
-                    {label}
-                  </StepButton>
-                </Step>
-              ))}
-            </Stepper>
+          <Client
+            name='Operator'
+            finalformApi={finalformApi}
+            valuesFinalForm={valuesFinalForm}
+            mutatorsFinalForm={mutatorsFinalForm}
+          />
 
-            <Collapse in={activeStep < 2}>
-              <TypeUploadData
-                activeStep={activeStep}
-                type='Operator'
-              />
-
-              <StepContents
-                type='Operator'
-                activeStep={activeStep}
-                finalformApi={finalformApi}
-                valuesFinalForm={valuesFinalForm}
-                mutatorsFinalForm={mutatorsFinalForm}
-              />
-
-            </Collapse>
-            <Collapse in={activeStep === 2}>
-              <Summary />
-            </Collapse>
-
-            <StyledGrid>
-              <Button
-                variant="outlined"
-                color="primary"
-              >
-                Назад
-              </Button>
-              <Button
-                variant="outlined"
-                color="primary"
-              >
-                Вперед
-              </Button>
-            </StyledGrid>
-          </MainCard>
-
-        </StyledCollapse>
+        </StyledCollapseClient>
       </>
     )
   }

@@ -39,6 +39,17 @@ export const StyledGrid = styled(Grid)`
   }
 `
 
+export const StyledCollapseClient = styled(Collapse)`
+  && {
+    margin-top: -10px;
+    width: 100%;
+    height: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`
+
 export const StyledCollapse = styled(Collapse)`
   && {
     margin-top: 10px;
