@@ -1,31 +1,86 @@
 import React, { Component } from "react";
-import { Grid, Button, MenuItem } from "@material-ui/core";
-import { DeleteOutlined } from "@material-ui/icons";
+import { Grid, Button, MenuItem, Chip } from "@material-ui/core";
+import { DeleteOutlined, AttachFileRounded } from "@material-ui/icons";
 import { Field } from "react-final-form";
 import { FieldArray } from 'react-final-form-arrays'
 import { Select } from 'final-form-material-ui'
 
-import { MainCard, StyledTextField, StyledGrid, GridButton, StyledIconButton } from '../StyledComponents/step/'
+import {
+  MainCard,
+  StyledTextField,
+  StyledGrid,
+  GridButton,
+  StyledIconButton,
+  Styledinput,
+  StyledAvatar,
+  Styledp
+} from '../StyledComponents/step/'
 import { NameAndFio } from '../Components/name-and-fio'
-import { DEFAULT_OBJECT, OPERATORS } from '../Constants'
+import {
+  OPERATORS,
+  ELITE_OPERATORS,
+  DEFAULT_SENDER_CLIENT,
+  DEFAULT_SENDER_OPERATOR,
+  DEFAULT_RECEIVER_CLIENT,
+  DEFAULT_RECEIVER_OPERATOR
+} from '../Constants'
 
-import {limit} from '../Utils'
+import { limit } from '../Utils'
+
+const DEFAULT_OBJECT = {
+  senderClient: {...DEFAULT_SENDER_CLIENT},
+  senderOperator: {...DEFAULT_SENDER_OPERATOR},
+  receiverClient: {...DEFAULT_RECEIVER_CLIENT},
+  receiverOperator: {...DEFAULT_RECEIVER_OPERATOR}
+}
 
 class StepContents extends Component {
+
+  uploadFile = file => {
+    const { activeStep, type, finalformApi, showSnackbar } = this.props
+    const nameField = `${activeStep === 0 ? 'sender' : 'receiver'}${type}`
+    const files = file.target.files[0]
+
+    if (files.type === 'application/pdf') {
+      finalformApi.change(`${type}file`, files)
+    }
+    else showSnackbar.enqueueSnackbar({
+      message: 'Файл должен иметь расширение ".pdf"', options: { variant: 'error', },
+    })
+  }
+
+  handleDeleteFile = () => {
+    const { activeStep, type, finalformApi } = this.props
+    const nameField = `${activeStep === 0 ? 'sender' : 'receiver'}${type}`
+
+    finalformApi.change(`${type}file`, undefined)
+  }
 
   render () {
     const { type, activeStep, finalformApi, valuesFinalForm, mutatorsFinalForm } = this.props
     const nameFieldArray = `${activeStep === 0 ? 'sender' : 'receiver'}${type}`
 
     let but = {}
+    let need_dop = valuesFinalForm[`${type}file`] ? true : false
+    let disabelInn = valuesFinalForm[`${nameFieldArray}file`] ? true : false
+    let filename = valuesFinalForm[`${type}file`] ? valuesFinalForm[`${type}file`].name : false
+
+    if (activeStep === 1 && type === 'Client' && !need_dop) {
+      valuesFinalForm[nameFieldArray].forEach((item, index) => {
+        let { operator } = valuesFinalForm[nameFieldArray][index]
+        need_dop = ELITE_OPERATORS.indexOf(operator) !== -1 ? true : need_dop
+      })
+    }
+
     return (
       <>
         <FieldArray name={nameFieldArray}>
           {({ fields }) => (
             <>
               {fields.map((key, index) => {
-
-                let objDis = limit(valuesFinalForm[nameFieldArray][index])
+                let objDis = valuesFinalForm[nameFieldArray][index]
+                  ? limit(valuesFinalForm[nameFieldArray][index])
+                  : { disable: true, disableKpp: true, typeUl: true, number: false }
                 but = {
                   addDisable: fields.length > 99 ? true : false,
                   deleteColor: fields.length === 1 ? 'default' : 'primary',
@@ -39,6 +94,8 @@ class StepContents extends Component {
                       <Grid item xs={12} sm={6}>
                           <Field
                             fullWidth
+                            disabled={disabelInn}
+                            required={!disabelInn}
                             component={StyledTextField}
                             label="ИНН"
                             name={`${key}.inn`}
@@ -128,7 +185,7 @@ class StepContents extends Component {
                   variant="outlined"
                   color="primary"
                   disabled={but.addDisable}
-                  onClick={() => { if (fields.length < 100) mutatorsFinalForm.push(nameFieldArray, { ...DEFAULT_OBJECT }) }}
+                  onClick={() => { if (fields.length < 100) mutatorsFinalForm.push(nameFieldArray, DEFAULT_OBJECT[nameFieldArray]) }}
                 >
                   {activeStep === 0
                     ? 'Добавить клиента'
@@ -136,14 +193,42 @@ class StepContents extends Component {
                   }
                 </Button>
               }
-              {(type === 'Client' && activeStep === 1) &&
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  onClick={() => { if (fields.length < 100) mutatorsFinalForm.push(nameFieldArray, { ...DEFAULT_OBJECT }) }}
-                >
-                  Загрузить доп. соглашение
-                </Button>
+              {(type === 'Client' && activeStep === 1 && need_dop && !filename) &&
+                <>
+                  <Styledinput
+                    accept=".pdf"
+                    id="soglash-button-file"
+                    type="file"
+                    onChange={this.uploadFile}
+                  />
+                  <label htmlFor="soglash-button-file">
+                    <Button
+                      fullWidth
+                      variant='outlined'
+                      color='primary'
+                      component="span"
+                    >
+                      Загрузить доп. соглашение
+                    </Button>
+                  </label>
+                </>
+              }
+              {(type === 'Client' && activeStep === 1 && need_dop && filename) &&
+                <Chip
+                  avatar={
+                    <StyledAvatar>
+                      <AttachFileRounded color='primary' />
+                    </StyledAvatar>
+                  }
+                  label={
+                    <Styledp>
+                      {filename}
+                    </Styledp>
+                  }
+                  onDelete={this.handleDeleteFile}
+                  variant='outlined'
+                  color='primary'
+                />
               }
               </GridButton>
             </>

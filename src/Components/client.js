@@ -24,7 +24,7 @@ import {
 import { STEP_CLIENT, STEP_OPERATOR } from '../Constants'
 import StepContents from '../Steps/step'
 import TypeUploadData from './type-upload-data'
-import Summary from './summary'
+import Summary from '../Steps/summary'
 
 class Client extends Component {
   state = {
@@ -38,7 +38,7 @@ class Client extends Component {
 
   render() {
     const { activeStep, openModalFile } = this.state
-    const { finalformApi, valuesFinalForm, mutatorsFinalForm, name } = this.props
+    const { finalformApi, valuesFinalForm, mutatorsFinalForm, name, showSnackbar } = this.props
     const STEP_GLOBAL = name === 'Client' ? [...STEP_CLIENT] : [...STEP_OPERATOR]
 
     return (
@@ -62,6 +62,7 @@ class Client extends Component {
             type={name}
             handleModalOpen={this.handleModalOpen}
             finalformApi={finalformApi}
+            showSnackbar={showSnackbar}
           />}
 
           <StepContents
@@ -70,11 +71,15 @@ class Client extends Component {
             finalformApi={finalformApi}
             valuesFinalForm={valuesFinalForm}
             mutatorsFinalForm={mutatorsFinalForm}
+            showSnackbar={showSnackbar}
           />
 
         </Collapse>
         <Collapse in={activeStep === 2}>
-          <Summary />
+          <Summary
+            type={name}
+            valuesFinalForm={valuesFinalForm}
+          />
         </Collapse>
 
         <StyledGrid>

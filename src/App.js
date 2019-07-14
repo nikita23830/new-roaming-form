@@ -4,9 +4,16 @@ import { Person, Business, SignalCellularAlt } from "@material-ui/icons";
 import { Form } from 'react-final-form'
 import styled from 'styled-components'
 import arrayMutators from 'final-form-arrays'
+import Notifier from './notifier';
+import { inject, observer } from 'mobx-react';
 
 import { FormDiv, Div } from './StyledComponents/'
-import { DEFAULT_OBJECT } from './Constants'
+import {
+  DEFAULT_SENDER_CLIENT,
+  DEFAULT_SENDER_OPERATOR,
+  DEFAULT_RECEIVER_CLIENT,
+  DEFAULT_RECEIVER_OPERATOR
+} from './Constants'
 
 import Auth from './Components/auth'
 import State from './Components/state'
@@ -18,7 +25,7 @@ class App extends Component {
   };
 
   handleChange = value => e => {
-    this.setState({ activePage: value });
+    this.setState({ activePage: value })
   };
 
   bindFormApi = formApi => {
@@ -31,6 +38,15 @@ class App extends Component {
     console.log(json)
   }
 
+  handleClick = () => {
+    this.props.store.enqueueSnackbar({
+      message: 'Произошла какая-то неизвестная ошибка',
+        options: {
+          variant: 'warning',
+        },
+    });
+  };
+
   render() {
     const { activePage } = this.state;
 
@@ -42,10 +58,10 @@ class App extends Component {
           ...arrayMutators
         }}
         initialValues={{
-          senderClient: [{...DEFAULT_OBJECT}],
-          senderOperator: [{...DEFAULT_OBJECT}],
-          receiverClient: [{...DEFAULT_OBJECT}],
-          receiverOperator: [{...DEFAULT_OBJECT}],
+          senderClient: [{...DEFAULT_SENDER_CLIENT}],
+          senderOperator: [{...DEFAULT_SENDER_OPERATOR}],
+          receiverClient: [{...DEFAULT_RECEIVER_CLIENT}],
+          receiverOperator: [{...DEFAULT_RECEIVER_OPERATOR}],
         }}
         render={({
           handleSubmit,
@@ -61,6 +77,8 @@ class App extends Component {
 
           return (
             <>
+              <Notifier />
+              
               <Paper square>
                 <Tabs
                   value={activePage}
@@ -97,6 +115,7 @@ class App extends Component {
                     values,
                     mutators,
                     formApi: this.formApi,
+                    showSnackbar: this.props.store,
                   })}
 
                 </Div>
@@ -109,7 +128,7 @@ class App extends Component {
   }
 }
 
-const getStepContent = ({ activePage, values, mutators, formApi }) => {
+const getStepContent = ({ activePage, values, mutators, formApi, showSnackbar }) => {
   // formApi.change('senderClient', [{}]);
   // formApi.change('receiverClient', [{}]);
   // formApi.change('senderOperator', [{}]);
@@ -121,12 +140,14 @@ const getStepContent = ({ activePage, values, mutators, formApi }) => {
         finalformApi={formApi}
         valuesFinalForm={values}
         mutatorsFinalForm={mutators}
+        showSnackbar={showSnackbar}
       />;
     case 1:
       return <Auth
         finalformApi={formApi}
         valuesFinalForm={values}
         mutatorsFinalForm={mutators}
+        showSnackbar={showSnackbar}
       />;
     case 2:
       return <State />;

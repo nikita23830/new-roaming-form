@@ -13,6 +13,12 @@ import {
   Styledp,
   StyledAvatar
 } from '../StyledComponents/components/type-upload-data/'
+import {
+  DEFAULT_SENDER_CLIENT,
+  DEFAULT_SENDER_OPERATOR,
+  DEFAULT_RECEIVER_CLIENT,
+  DEFAULT_RECEIVER_OPERATOR
+} from '../Constants'
 
 class TypeUploadData extends Component {
 
@@ -22,13 +28,18 @@ class TypeUploadData extends Component {
   }
 
   uploadFile = file => {
-    const { activeStep, type, finalformApi } = this.props
-    const nameField = `${activeStep === 0 ? 'sender' : 'receiver'}${type}file`
+    const { activeStep, type, finalformApi, showSnackbar } = this.props
+    const nameField = `${activeStep === 0 ? 'sender' : 'receiver'}${type}`
     const files = file.target.files[0]
     const normal_type = [ 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel' ]
 
-    if (files.type === normal_type[0] || files.type === normal_type[1]) { finalformApi.change(nameField, files) }
-    else this.setState({ openSnackbar: true, textSnackbar: 'Файл должен иметь расширение ".xls" или ".xlsx"' })
+    if (files.type === normal_type[0] || files.type === normal_type[1]) {
+      finalformApi.change(`${nameField}file`, files)
+      finalformApi.change(nameField, [{...DEFAULT_OBJECT[nameField]}])
+    }
+    else showSnackbar.enqueueSnackbar({
+      message: 'Файл должен иметь расширение ".xls" или ".xlsx', options: { variant: 'error', },
+    })
   }
 
   handleDeleteFile = () => {
@@ -132,6 +143,13 @@ class TypeUploadData extends Component {
       </>
     )
   }
+}
+
+const DEFAULT_OBJECT = {
+  senderClient: {...DEFAULT_SENDER_CLIENT},
+  senderOperator: {...DEFAULT_SENDER_OPERATOR},
+  receiverClient: {...DEFAULT_RECEIVER_CLIENT},
+  receiverOperator: {...DEFAULT_RECEIVER_OPERATOR}
 }
 
 export default TypeUploadData

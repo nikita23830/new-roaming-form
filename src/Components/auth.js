@@ -15,7 +15,6 @@ import { STEP_OPERATOR } from '../Constants'
 import StepContents from '../Steps/step'
 import TypeUploadData from './type-upload-data'
 import Client from './client'
-import Summary from './summary'
 
 class Auth extends Component {
   state = {
@@ -33,7 +32,7 @@ class Auth extends Component {
 
   render () {
     const { openAuth, openStep, activeStep } = this.state
-    const { finalformApi, valuesFinalForm, mutatorsFinalForm } = this.props
+    const { finalformApi, valuesFinalForm, mutatorsFinalForm, showSnackbar } = this.props
 
     return (
       <>
@@ -73,6 +72,7 @@ class Auth extends Component {
             finalformApi={finalformApi}
             valuesFinalForm={valuesFinalForm}
             mutatorsFinalForm={mutatorsFinalForm}
+            showSnackbar={showSnackbar}
           />
 
         </StyledCollapseClient>

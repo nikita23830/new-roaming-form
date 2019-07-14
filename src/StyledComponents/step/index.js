@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Card, Grid, IconButton } from '@material-ui/core';
+import { Card, Grid, IconButton, Avatar } from '@material-ui/core';
 import { TextField } from 'final-form-material-ui'
 
 export const StyledTextField = styled(TextField)`
@@ -38,5 +38,27 @@ export const GridButton = styled(Grid)`
    margin-top: 20px;
    display: flex;
    justify-content: space-between;
+  }
+`
+
+export const Styledinput = styled.input`
+  && {
+    display: none;
+  }
+`
+
+export const Styledp = styled.p`
+  && {
+    width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+`
+
+export const StyledAvatar = styled(Avatar)`
+  && {
+    background-color: #fff;
+    border: 1px solid #6a1b9a;
   }
 `

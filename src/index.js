@@ -1,8 +1,12 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
+import { render } from "react-dom";
+import { Provider } from 'mobx-react';
+import { SnackbarProvider } from 'notistack';
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import purple from "@material-ui/core/colors/purple";
+
+import App from "./App";
+import store from './store';
 
 const theme = createMuiTheme({
   palette: {
@@ -20,9 +24,13 @@ const theme = createMuiTheme({
   }
 });
 
-ReactDOM.render(
-  <MuiThemeProvider theme={theme}>
-    <App />
-  </MuiThemeProvider>,
+render(
+  <Provider store={store}>
+    <SnackbarProvider maxSnack={3}>
+      <MuiThemeProvider theme={theme}>
+        <App store={store} />
+      </MuiThemeProvider>
+    </SnackbarProvider>
+  </Provider>,
   document.getElementById("root")
 );

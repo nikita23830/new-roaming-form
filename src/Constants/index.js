@@ -10,7 +10,42 @@ export const STEP_CLIENT = [
   'Проверка введенных данных'
 ]
 
-export const DEFAULT_OBJECT = {
+export const STEP = {
+  Client: [...STEP_CLIENT],
+  Operator: [...STEP_OPERATOR]
+}
+
+export const DEFAULT_SENDER_CLIENT = {
+  id: '',
+  inn: '',
+  kpp: '',
+  name: '',
+  lastname: '',
+  firstname: '',
+  patronymic: '',
+}
+
+export const DEFAULT_RECEIVER_CLIENT = {
+  id: '',
+  inn: '',
+  kpp: '',
+  name: '',
+  lastname: '',
+  firstname: '',
+  patronymic: '',
+}
+
+export const DEFAULT_SENDER_OPERATOR = {
+  id: '',
+  inn: '',
+  kpp: '',
+  name: '',
+  lastname: '',
+  firstname: '',
+  patronymic: '',
+}
+
+export const DEFAULT_RECEIVER_OPERATOR = {
   id: '',
   inn: '',
   kpp: '',
@@ -50,3 +85,16 @@ export const OPERATORS = [
     label: "Synerdocs – 2IG"
   }
 ];
+
+export const ELITE_OPERATORS = [
+  '2BM',
+  '2BE',
+  '2AL'
+]
+
+export const EXPANSION = [
+  'errors',
+  'sender',
+  'files',
+  'receiver'
+]
