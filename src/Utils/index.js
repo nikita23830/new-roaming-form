@@ -27,15 +27,27 @@ export const soglash = (data) => {
 }
 
 export const mayShow = (values) => {
-  let result = { show: false, data: [{}] }
+  let result = []
   let newIndex = 0
 
   values.map((item, index) => {
     if (item && item.inn && (item.inn.length === 10 || item.inn.length === 12)) {
-      if (item.inn.length === 10) {
-        result.show = item.name ? true : result.show
-        if (result.data[newIndex])
-        result.data[newIndex].name = item.name ? true : result.show
+      let show = false
+
+      show = (item.inn.length === 10 && item.name) ? true : show
+      show = (item.inn.length === 12 && item.lastname && item.firstname) ? true : show
+
+      if (show) {
+        if (!result[newIndex]) result[newIndex] = {}
+        result[newIndex].name = item.inn.length === 10 ? item.name : `ИП ${item.lastname} ${item.firstname}`
+        result[newIndex].name = (item.inn.length === 12 && item.patronymic) ? `${result[newIndex].name} ${item.patronymic}` : result[newIndex].name
+        result[newIndex].kpp = item.inn.length === 10 ? item.kpp : false
+        result[newIndex].operator = item.operator ? item.operator : false
+        result[newIndex].id = item.id ? item.id : false
+        result[newIndex].email = item.email ? item.email : false
+        result[newIndex].number = item.number ? item.number : false
+        result[newIndex].inn = item.inn
+        newIndex++
       }
     }
   })

@@ -37,8 +37,7 @@ const DEFAULT_OBJECT = {
 class StepContents extends Component {
 
   uploadFile = file => {
-    const { activeStep, type, finalformApi, showSnackbar } = this.props
-    const nameField = `${activeStep === 0 ? 'sender' : 'receiver'}${type}`
+    const { type, finalformApi, showSnackbar } = this.props
     const files = file.target.files[0]
 
     if (files.type === 'application/pdf') {
@@ -50,8 +49,7 @@ class StepContents extends Component {
   }
 
   handleDeleteFile = () => {
-    const { activeStep, type, finalformApi } = this.props
-    const nameField = `${activeStep === 0 ? 'sender' : 'receiver'}${type}`
+    const { type, finalformApi } = this.props
 
     finalformApi.change(`${type}file`, undefined)
   }
@@ -116,7 +114,7 @@ class StepContents extends Component {
                       <NameAndFio
                         disable={objDis.disable}
                         typeUL={objDis.typeUl}
-                        key={key}
+                        insertkey={key}
                         component={StyledTextField}
                       />
 

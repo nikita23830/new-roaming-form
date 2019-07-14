@@ -5,7 +5,7 @@ import { Field } from "react-final-form";
 import { StyledGrid } from '../StyledComponents/step/'
 
 export const NameAndFio = props => {
-  const { typeUL, disable, key, component } = props
+  const { typeUL, disable, insertkey, component } = props
 
   return (
     <>
@@ -14,7 +14,7 @@ export const NameAndFio = props => {
           disabled={disable}
           required={!disable}
           fullWidth
-          name={`${key}.name`}
+          name={`${insertkey}.name`}
           label='Название организации'
           component={component}
         />
@@ -25,7 +25,7 @@ export const NameAndFio = props => {
             disabled={disable}
             required={!disable}
             fullWidth
-            name={`${key}.lastname`}
+            name={`${insertkey}.lastname`}
             label='Имя'
             component={component}
           />
@@ -35,7 +35,7 @@ export const NameAndFio = props => {
             disabled={disable}
             required={!disable}
             fullWidth
-            name={`${key}.firstname`}
+            name={`${insertkey}.firstname`}
             label='Фамилия'
             component={component}
           />
@@ -44,7 +44,7 @@ export const NameAndFio = props => {
           <Field
             disabled={disable}
             fullWidth
-            name={`${key}.patronymic`}
+            name={`${insertkey}.patronymic`}
             label='Отчество'
             component={component}
           />
