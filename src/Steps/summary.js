@@ -8,9 +8,10 @@ import {
   Table,
   TableBody,
   TableRow,
-  TableCell
+  TableCell,
+  IconButton
 } from '@material-ui/core'
-import { ExpandMore, Send, AttachFileRounded } from '@material-ui/icons'
+import { ExpandMore, Send, AttachFileRounded, DeleteOutline } from '@material-ui/icons'
 import { EXPANSION, STEP } from '../Constants'
 import {
   StyledDiv,
@@ -23,11 +24,12 @@ import {
   StyledChip
 } from '../StyledComponents/step/summary'
 import { mayShow } from '../Utils'
+import { withSnackbar } from 'notistack';
 
 class Summary extends Component {
 
   chipDeleteFile = (index) => () => {
-    const { finalformApi, valuesFinalForm, type, showSnackbar } = this.props
+    const { finalformApi, valuesFinalForm, type } = this.props
     const nameFields = { sender: `sender${type}`, receiver: `receiver${type}` }
     const files = [
       `${nameFields.sender}file`,
@@ -35,8 +37,14 @@ class Summary extends Component {
       `${type}file`
     ]
     finalformApi.change(files[index], undefined)
-    showSnackbar.enqueueSnackbar({
-      message: 'Файл удален успешно', options: { variant: 'success', },
+    this.props.enqueueSnackbar('Файл удален успешно', {
+      variant: 'success',
+      persist: true,
+      action: (key) => (
+        <IconButton onClick={() => { this.props.closeSnackbar(key) }}>
+          <DeleteOutline color='primary' />
+        </IconButton>
+      )
     })
   }
 
@@ -187,4 +195,4 @@ const CustomTableBody = ({ item }) => {
   )
 }
 
-export default Summary
+export default withSnackbar(Summary)

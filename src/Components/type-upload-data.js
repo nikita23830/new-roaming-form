@@ -1,6 +1,7 @@
 import React, { Component } from "react";
+import { withSnackbar } from 'notistack';
 import { Button, Grid, Typography, IconButton, Chip, Snackbar } from '@material-ui/core'
-import { AttachFileRounded, HelpOutline, Close } from '@material-ui/icons'
+import { AttachFileRounded, HelpOutline, Close, DeleteOutline } from '@material-ui/icons'
 import {
   StyledCollapse,
   AuthCard,
@@ -28,17 +29,32 @@ class TypeUploadData extends Component {
   }
 
   uploadFile = file => {
-    const { activeStep, type, finalformApi, showSnackbar } = this.props
+    const { activeStep, type, finalformApi } = this.props
     const nameField = `${activeStep === 0 ? 'sender' : 'receiver'}${type}`
     const files = file.target.files[0]
     const normal_type = [ 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'application/vnd.ms-excel' ]
 
     if (files.type === normal_type[0] || files.type === normal_type[1]) {
+      this.props.enqueueSnackbar('Список успешно загружен', {
+        variant: 'success',
+        persist: true,
+        action: (key) => (
+          <IconButton onClick={() => { this.props.closeSnackbar(key) }}>
+            <DeleteOutline color='primary' />
+          </IconButton>
+        )
+      })
       finalformApi.change(`${nameField}file`, files)
       finalformApi.change(nameField, [{...DEFAULT_OBJECT[nameField]}])
     }
-    else showSnackbar.enqueueSnackbar({
-      message: 'Файл должен иметь расширение ".xls" или ".xlsx', options: { variant: 'error', },
+    else this.props.enqueueSnackbar('Файл должен иметь расширение ".xls" или ".xlsx', {
+      variant: 'error',
+      persist: true,
+      action: (key) => (
+        <IconButton onClick={() => { this.props.closeSnackbar(key) }}>
+          <DeleteOutline color='primary' />
+        </IconButton>
+      )
     })
   }
 
@@ -145,6 +161,7 @@ class TypeUploadData extends Component {
   }
 }
 
+
 const DEFAULT_OBJECT = {
   senderClient: {...DEFAULT_SENDER_CLIENT},
   senderOperator: {...DEFAULT_SENDER_OPERATOR},
@@ -152,4 +169,4 @@ const DEFAULT_OBJECT = {
   receiverOperator: {...DEFAULT_RECEIVER_OPERATOR}
 }
 
-export default TypeUploadData
+export default withSnackbar(TypeUploadData)

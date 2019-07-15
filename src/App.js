@@ -4,8 +4,7 @@ import { Person, Business, SignalCellularAlt } from "@material-ui/icons";
 import { Form } from 'react-final-form'
 import styled from 'styled-components'
 import arrayMutators from 'final-form-arrays'
-import Notifier from './notifier';
-import { inject, observer } from 'mobx-react';
+import { SnackbarProvider, withSnackbar } from 'notistack';
 
 import { FormDiv, Div } from './StyledComponents/'
 import {
@@ -40,15 +39,6 @@ class App extends Component {
     console.log(json)
   }
 
-  handleClick = () => {
-    this.props.store.enqueueSnackbar({
-      message: 'Произошла какая-то неизвестная ошибка',
-        options: {
-          variant: 'warning',
-        },
-    });
-  };
-
   render() {
     const { activePage } = this.state;
 
@@ -79,9 +69,7 @@ class App extends Component {
           const { change, mutators } = form
 
           return (
-            <>
-              <Notifier />
-
+            <SnackbarProvider maxSnack={3}>
               <Paper square>
                 <Tabs
                   value={activePage}
@@ -118,12 +106,11 @@ class App extends Component {
                     values,
                     mutators,
                     formApi: this.formApi,
-                    showSnackbar: this.props.store,
                   })}
 
                 </Div>
               </FormDiv>
-            </>
+            </SnackbarProvider>
           )
         }}
       />
@@ -131,11 +118,7 @@ class App extends Component {
   }
 }
 
-const getStepContent = ({ activePage, values, mutators, formApi, showSnackbar }) => {
-  // formApi.change('senderClient', [{}]);
-  // formApi.change('receiverClient', [{}]);
-  // formApi.change('senderOperator', [{}]);
-  // formApi.change('receiverOperator', [{}]);
+const getStepContent = ({ activePage, values, mutators, formApi }) => {
   switch (activePage) {
     case 0:
       return <Client
@@ -143,14 +126,12 @@ const getStepContent = ({ activePage, values, mutators, formApi, showSnackbar })
         finalformApi={formApi}
         valuesFinalForm={values}
         mutatorsFinalForm={mutators}
-        showSnackbar={showSnackbar}
       />;
     case 1:
       return <Auth
         finalformApi={formApi}
         valuesFinalForm={values}
         mutatorsFinalForm={mutators}
-        showSnackbar={showSnackbar}
       />;
     case 2:
       return <State />;
