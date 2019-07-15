@@ -10,18 +10,35 @@ import {
   TableRow,
   TableCell
 } from '@material-ui/core'
-import { ExpandMore, Send } from '@material-ui/icons'
+import { ExpandMore, Send, AttachFileRounded } from '@material-ui/icons'
 import { EXPANSION, STEP } from '../Constants'
 import {
   StyledDiv,
   StyledButton,
   StyledTypography,
   StyledExpansionPanel,
-  StyleListExpansionPanel
+  StyleListExpansionPanel,
+  Styledp,
+  StyledAvatar,
+  StyledChip
 } from '../StyledComponents/step/summary'
 import { mayShow } from '../Utils'
 
 class Summary extends Component {
+
+  chipDeleteFile = (index) => () => {
+    const { finalformApi, valuesFinalForm, type, showSnackbar } = this.props
+    const nameFields = { sender: `sender${type}`, receiver: `receiver${type}` }
+    const files = [
+      `${nameFields.sender}file`,
+      `${nameFields.receiver}file`,
+      `${type}file`
+    ]
+    finalformApi.change(files[index], undefined)
+    showSnackbar.enqueueSnackbar({
+      message: 'Файл удален успешно', options: { variant: 'success', },
+    })
+  }
 
   render () {
     const { type, valuesFinalForm } = this.props
@@ -47,7 +64,7 @@ class Summary extends Component {
       objReceiver = mayShow(valuesFinalForm[nameFields.receiver])
       showSender = objSender.length === 0 ? false : true
       showReceiver = objReceiver.length === 0 ? false : true
-      showErrors = (showReceiver && showReceiver) ? false : true
+      showErrors = ((showReceiver || files[0]) && (showReceiver || files[1])) ? false : true
     }
     files.map(item => { collFiles = !item ? collFiles : collFiles + 1 })
 
@@ -60,13 +77,13 @@ class Summary extends Component {
           <ExpansionPanelDetails>
             <StyledDiv>
               <StyledTypography>Некорретные или неполные данные. Перейдите на нужный этап для исправления ошибок</StyledTypography>
-              {!showSender && <Grid item sm={12} sx={4}>
+              {(!showSender && !files[0]) && <Grid item sm={12} sx={4}>
                 <StyledButton variant="outlined" aria-label="Delete" color='primary' >
                   {STEP[type][0]}
                   <Send color='primary' />
                 </StyledButton>
               </Grid>}
-              {!showReceiver && <Grid item sm={12} sx={4}>
+              {(!showReceiver && !files[1]) && <Grid item sm={12} sx={4}>
                 <StyledButton variant="outlined" aria-label="Delete" color='primary' >
                   {STEP[type][1]}
                   <Send color='primary' />
@@ -97,7 +114,25 @@ class Summary extends Component {
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
 
-
+          {showFiles && files.map((item, index) => (
+            <>
+              {item && <StyledChip
+                avatar={
+                  <StyledAvatar>
+                    <AttachFileRounded color='primary' />
+                  </StyledAvatar>
+                }
+                label={
+                  <Styledp>
+                    {item.name}
+                  </Styledp>
+                }
+                variant='outlined'
+                onDelete={this.chipDeleteFile(index)}
+                color='primary'
+              />}
+            </>
+          ))}
 
           </ExpansionPanelDetails>
         </StyleListExpansionPanel>}

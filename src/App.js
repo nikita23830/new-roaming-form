@@ -19,6 +19,8 @@ import Auth from './Components/auth'
 import State from './Components/state'
 import Client from './Components/client'
 
+import { validate } from './Utils/validate'
+
 class App extends Component {
   state = {
     activePage: 1
@@ -54,6 +56,7 @@ class App extends Component {
       <Form
         onSubmit={this.onSubmitFinalForm}
         decorators={[this.bindFormApi]}
+        validate={validate}
         mutators={{
           ...arrayMutators
         }}
@@ -78,7 +81,7 @@ class App extends Component {
           return (
             <>
               <Notifier />
-              
+
               <Paper square>
                 <Tabs
                   value={activePage}

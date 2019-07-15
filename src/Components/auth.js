@@ -24,7 +24,7 @@ class Auth extends Component {
   }
 
   async componentDidMount() {
-    const auth = await axiosAPI({ path: 'operator' })
+    // const auth = await axiosAPI({ path: 'operator' })
     this.setState({ openAuth: false, openStep: true })
   }
 

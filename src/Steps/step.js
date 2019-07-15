@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { Grid, Button, MenuItem, Chip } from "@material-ui/core";
+import { Grid, Button, MenuItem, Chip, InputAdornment } from "@material-ui/core";
 import { DeleteOutlined, AttachFileRounded } from "@material-ui/icons";
 import { Field } from "react-final-form";
 import { FieldArray } from 'react-final-form-arrays'
 import { Select } from 'final-form-material-ui'
+import formatStringByPattern from "format-string-by-pattern";
 
 import {
   MainCard,
@@ -70,6 +71,9 @@ class StepContents extends Component {
       })
     }
 
+    let show2AE = ((type === 'Client' && activeStep === 0) || (type === 'Operator' && activeStep === 1))
+      ? true : false
+
     return (
       <>
         <FieldArray name={nameFieldArray}>
@@ -85,6 +89,7 @@ class StepContents extends Component {
                   deleteDisable: fields.length === 1 ? true : false
                 }
 
+
                 return (
                 <>
                   <MainCard>
@@ -97,6 +102,7 @@ class StepContents extends Component {
                             component={StyledTextField}
                             label="ИНН"
                             name={`${key}.inn`}
+                            parse={formatStringByPattern("999999999999")}
                           />
                         </Grid>
                         <Grid item xs={12} sm={6}>
@@ -107,6 +113,7 @@ class StepContents extends Component {
                             component={StyledTextField}
                             label="КПП"
                             name={`${key}.kpp`}
+                            parse={formatStringByPattern("999999999")}
                           />
                         </Grid>
                       </StyledGrid>
@@ -126,6 +133,7 @@ class StepContents extends Component {
                           component={StyledTextField}
                           label="Идентификатор"
                           name={`${key}.id`}
+                          parse={parse}
                         />
                       </StyledGrid>}
                       {objDis.number && <StyledGrid item xs={12} sm={12}>
@@ -136,6 +144,7 @@ class StepContents extends Component {
                           component={StyledTextField}
                           label="Номер заявки"
                           name={`${key}.number`}
+                          parse={formatStringByPattern("999999")}
                         />
                       </StyledGrid>}
                       {(activeStep === 0 && type === 'Client') && <StyledGrid item xs={12} sm={12}>
@@ -237,5 +246,12 @@ class StepContents extends Component {
   }
 };
 
+const parse = value => {
+  const someFormat = formatStringByPattern(
+    "XXXXXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
+  );
+  let newValue = someFormat(value.toUpperCase());
+  return newValue;
+};
 
 export default StepContents

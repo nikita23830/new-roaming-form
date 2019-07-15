@@ -29,17 +29,25 @@ import Summary from '../Steps/summary'
 class Client extends Component {
   state = {
     activeStep: 0,
-    openModalFile: false,
+    openModalFile: false
   }
 
   handleStep = index => () =>  this.setState({ activeStep: index })
   handleModalClose = () => this.setState({ openModalFile: false })
   handleModalOpen = () => this.setState({ openModalFile: true })
+  handleBack = () => this.setState({ activeStep: this.state.activeStep - 1 })
+  handleNext = () => this.setState({ activeStep: this.state.activeStep + 1 })
+
+  handleSend = () => {
+
+  }
 
   render() {
-    const { activeStep, openModalFile } = this.state
+    const { activeStep, openModalFile, disabledSend } = this.state
     const { finalformApi, valuesFinalForm, mutatorsFinalForm, name, showSnackbar } = this.props
     const STEP_GLOBAL = name === 'Client' ? [...STEP_CLIENT] : [...STEP_OPERATOR]
+    let valid = false
+    if (finalformApi) valid = finalformApi.getState().valid
 
     return (
       <MainCard>
@@ -79,6 +87,8 @@ class Client extends Component {
           <Summary
             type={name}
             valuesFinalForm={valuesFinalForm}
+            finalformApi={finalformApi}
+            showSnackbar={showSnackbar}
           />
         </Collapse>
 
@@ -86,14 +96,18 @@ class Client extends Component {
           <Button
             variant="outlined"
             color="primary"
+            onClick={activeStep === 0 ? null : this.handleBack}
+            disabled={activeStep === 0 ? true : false}
           >
             Назад
           </Button>
           <Button
             variant="outlined"
             color="primary"
+            onClick={activeStep === 2 ? this.handleSend : this.handleNext}
+            disabled={!valid}
           >
-            Вперед
+            {activeStep !== 2 ? 'Вперед' : 'Отправить'}
           </Button>
         </StyledGrid>
 

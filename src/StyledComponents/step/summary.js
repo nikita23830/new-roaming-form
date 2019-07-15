@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { Typography, Button, ExpansionPanel } from '@material-ui/core';
+import { Typography, Button, ExpansionPanel, Avatar, Chip } from '@material-ui/core';
 
 export const StyledDiv = styled.div`
  && {
@@ -39,5 +39,28 @@ export const StyleListExpansionPanel = styled(ExpansionPanel)`
    margin-top: 5px;
    margin-botom: 5px;
    border: 1px solid #6a1b9a;
+  }
+`
+
+export const Styledp = styled.p`
+  && {
+    width: 100px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+`
+
+export const StyledAvatar = styled(Avatar)`
+  && {
+    background-color: #fff;
+    border: 1px solid #6a1b9a;
+  }
+`
+
+export const StyledChip = styled(Chip)`
+  && {
+    margin-left: 5px;
+    margin-right: 5px;
   }
 `

@@ -23,16 +23,17 @@ export const DEFAULT_SENDER_CLIENT = {
   lastname: '',
   firstname: '',
   patronymic: '',
+  email: '',
 }
 
 export const DEFAULT_RECEIVER_CLIENT = {
-  id: '',
   inn: '',
   kpp: '',
   name: '',
   lastname: '',
   firstname: '',
   patronymic: '',
+  operator: '',
 }
 
 export const DEFAULT_SENDER_OPERATOR = {
@@ -43,6 +44,7 @@ export const DEFAULT_SENDER_OPERATOR = {
   lastname: '',
   firstname: '',
   patronymic: '',
+  number: '',
 }
 
 export const DEFAULT_RECEIVER_OPERATOR = {
