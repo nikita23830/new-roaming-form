@@ -18,7 +18,7 @@ import Auth from './Components/auth'
 import State from './Components/state'
 import Client from './Components/client'
 
-import { validate } from './Utils/validate'
+import { validate } from './Validate'
 
 class App extends Component {
   state = {
@@ -36,7 +36,7 @@ class App extends Component {
   };
 
   onSubmitFinalForm = json => {
-    console.log(json)
+    // console.log(json)
   }
 
   render() {
@@ -51,10 +51,10 @@ class App extends Component {
           ...arrayMutators
         }}
         initialValues={{
-          senderClient: [{...DEFAULT_SENDER_CLIENT}],
-          senderOperator: [{...DEFAULT_SENDER_OPERATOR}],
-          receiverClient: [{...DEFAULT_RECEIVER_CLIENT}],
-          receiverOperator: [{...DEFAULT_RECEIVER_OPERATOR}],
+          senderClient: [(activePage === 0) ? {...DEFAULT_SENDER_CLIENT} : {}],
+          senderOperator: [(activePage === 1) ? {...DEFAULT_SENDER_OPERATOR} : {}],
+          receiverClient: [(activePage === 0) ? {...DEFAULT_RECEIVER_CLIENT} : {}],
+          receiverOperator: [(activePage === 1) ? {...DEFAULT_RECEIVER_OPERATOR} : {}],
         }}
         render={({
           handleSubmit,
@@ -69,7 +69,7 @@ class App extends Component {
           const { change, mutators } = form
 
           return (
-            <SnackbarProvider maxSnack={3}>
+            <SnackbarProvider maxSnack={10}>
               <Paper square>
                 <Tabs
                   value={activePage}
@@ -139,5 +139,7 @@ const getStepContent = ({ activePage, values, mutators, formApi }) => {
       throw new Error("Unknown step");
   }
 };
+
+
 
 export default App;

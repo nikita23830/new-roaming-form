@@ -48,7 +48,7 @@ class Client extends Component {
     const STEP_GLOBAL = name === 'Client' ? [...STEP_CLIENT] : [...STEP_OPERATOR]
     let valid = false
     if (finalformApi) valid = finalformApi.getState().valid
-
+    if (finalformApi) console.log(finalformApi.getState())
     return (
       <MainCard>
         <Typography component="h1" variant="h4" align="center">
@@ -89,6 +89,7 @@ class Client extends Component {
             valuesFinalForm={valuesFinalForm}
             finalformApi={finalformApi}
             showSnackbar={showSnackbar}
+            handleStep={this.handleStep}
           />
         </Collapse>
 

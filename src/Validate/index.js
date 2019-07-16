@@ -1,3 +1,5 @@
+import { DEFAULT_OBJECT_VALIDATE } from '../Constants'
+
 export const validate = values => {
   let errors = {};
   let error = "";
@@ -7,9 +9,9 @@ export const validate = values => {
       // if object value from operators
       values[key].map((item, index) => { // цикл sender or receiver
 
-        if ((typeof values[key][index]) === 'object') {
+        if ((typeof item) === 'object') {
           // easy check
-          Object.keys(values[key][index]).forEach(keyItem => {
+          DEFAULT_OBJECT_VALIDATE[key].forEach(keyItem => {
             // need object
             let value = values[key][index][keyItem] // value
             let objvalues = values[key][index] // object
@@ -57,7 +59,7 @@ const validationKpp = ({ value, objvalues, type }) => {
 const validationGuid = ({ value, objvalues, type }) => {
   let id = "";
   if (objvalues.inn && (objvalues.inn.length === 10 || objvalues.inn.length === 12) && !value)
-    id = type === 'sender' ? "Обязательное поле" : '';
+    id = type !== 'receiverOperator' ? "Обязательное поле" : '';
   if (value && value.length < 36) id = "Некорректный идентификатор";
   return id;
 };
@@ -83,11 +85,39 @@ const validationFirstName = ({ value, objvalues, type }) => {
   return firstname;
 };
 
+const validationEmail = ({ value, objvalues, type }) => {
+  let email = "";
+  if (objvalues.inn && (objvalues.inn.length === 10 || objvalues.inn.length === 12) && !value)
+    email = "Обязательное поле"
+  let reg = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Zа-яА-Я\-0-9]+\.)+[a-zA-Zа-яА-Я]{2,}))$/;
+  if (value) email = reg.test(value.toLowerCase())
+  return email;
+};
+
+const validationOperator = ({ value, objvalues, type }) => {
+  let operator = "";
+  if (objvalues.inn && (objvalues.inn.length === 10 || objvalues.inn.length === 12) && !value)
+    operator = "Обязательное поле"
+  return operator;
+};
+
+const validationNumber = ({ value, objvalues, type }) => {
+  let number = "";
+  if (objvalues.inn && (objvalues.inn.length === 10 || objvalues.inn.length === 12) && !value)
+    number = "Обязательное поле"
+  return number;
+};
+
+
+
 const distributor = {
   inn: validationInn,
   kpp: validationKpp,
   id: validationGuid,
   name: validationName,
   lastname: validationLastName,
-  firstname: validationFirstName
+  firstname: validationFirstName,
+  email: validationEmail,
+  operator: validationOperator,
+  number: validationNumber,
 };

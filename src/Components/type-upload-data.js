@@ -40,19 +40,19 @@ class TypeUploadData extends Component {
         persist: true,
         action: (key) => (
           <IconButton onClick={() => { this.props.closeSnackbar(key) }}>
-            <DeleteOutline color='primary' />
+            <DeleteOutline />
           </IconButton>
         )
       })
       finalformApi.change(`${nameField}file`, files)
       finalformApi.change(nameField, [{...DEFAULT_OBJECT[nameField]}])
     }
-    else this.props.enqueueSnackbar('Файл должен иметь расширение ".xls" или ".xlsx', {
+    else this.props.enqueueSnackbar('Файл должен иметь расширение ".xls" или ".xlsx"', {
       variant: 'error',
       persist: true,
       action: (key) => (
         <IconButton onClick={() => { this.props.closeSnackbar(key) }}>
-          <DeleteOutline color='primary' />
+          <DeleteOutline />
         </IconButton>
       )
     })

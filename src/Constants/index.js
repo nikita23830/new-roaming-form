@@ -100,3 +100,10 @@ export const EXPANSION = [
   'files',
   'receiver'
 ]
+
+export const DEFAULT_OBJECT_VALIDATE = {
+  senderClient: [...Object.keys(DEFAULT_SENDER_CLIENT)],
+  senderOperator: [...Object.keys(DEFAULT_SENDER_OPERATOR)],
+  receiverClient: [...Object.keys(DEFAULT_RECEIVER_CLIENT)],
+  receiverOperator: [...Object.keys(DEFAULT_RECEIVER_OPERATOR)]
+}

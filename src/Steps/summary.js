@@ -42,14 +42,14 @@ class Summary extends Component {
       persist: true,
       action: (key) => (
         <IconButton onClick={() => { this.props.closeSnackbar(key) }}>
-          <DeleteOutline color='primary' />
+          <DeleteOutline />
         </IconButton>
       )
     })
   }
 
   render () {
-    const { type, valuesFinalForm } = this.props
+    const { type, valuesFinalForm, handleStep } = this.props
     const nameFields = { sender: `sender${type}`, receiver: `receiver${type}` }
     const files = [
       valuesFinalForm[`${nameFields.sender}file`],
@@ -72,7 +72,7 @@ class Summary extends Component {
       objReceiver = mayShow(valuesFinalForm[nameFields.receiver])
       showSender = objSender.length === 0 ? false : true
       showReceiver = objReceiver.length === 0 ? false : true
-      showErrors = ((showReceiver || files[0]) && (showReceiver || files[1])) ? false : true
+      showErrors = ((showSender || files[0]) && (showReceiver || files[1])) ? false : true
     }
     files.map(item => { collFiles = !item ? collFiles : collFiles + 1 })
 
@@ -86,13 +86,13 @@ class Summary extends Component {
             <StyledDiv>
               <StyledTypography>Некорретные или неполные данные. Перейдите на нужный этап для исправления ошибок</StyledTypography>
               {(!showSender && !files[0]) && <Grid item sm={12} sx={4}>
-                <StyledButton variant="outlined" aria-label="Delete" color='primary' >
+                <StyledButton variant="outlined" aria-label="Delete" color='primary' onClick={handleStep(0)} >
                   {STEP[type][0]}
                   <Send color='primary' />
                 </StyledButton>
               </Grid>}
               {(!showReceiver && !files[1]) && <Grid item sm={12} sx={4}>
-                <StyledButton variant="outlined" aria-label="Delete" color='primary' >
+                <StyledButton variant="outlined" aria-label="Delete" color='primary' onClick={handleStep(1)} >
                   {STEP[type][1]}
                   <Send color='primary' />
                 </StyledButton>
@@ -145,7 +145,7 @@ class Summary extends Component {
           </ExpansionPanelDetails>
         </StyleListExpansionPanel>}
 
-        {showReceiver && <Typography variant="h6">{STEP[type][0]}</Typography>}
+        {showReceiver && <Typography variant="h6">{STEP[type][1]}</Typography>}
         {showReceiver && objReceiver.map(item => (
           <StyleListExpansionPanel>
             <ExpansionPanelSummary expandIcon={<ExpandMore color='primary'/>}>

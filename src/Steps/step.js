@@ -71,9 +71,6 @@ class StepContents extends Component {
       })
     }
 
-    let show2AE = ((type === 'Client' && activeStep === 0) || (type === 'Operator' && activeStep === 1))
-      ? true : false
-
     return (
       <>
         <FieldArray name={nameFieldArray}>
@@ -89,7 +86,7 @@ class StepContents extends Component {
                   deleteDisable: fields.length === 1 ? true : false
                 }
 
-
+                if (finalformApi) finalformApi.submit()
                 return (
                 <>
                   <MainCard>
@@ -128,7 +125,7 @@ class StepContents extends Component {
                       {!(type === 'Client' && activeStep === 1) && <StyledGrid item xs={12} sm={12}>
                         <Field
                           disabled={objDis.disable}
-                          required={!objDis.disable}
+                          required={(type === 'Operator' && activeStep === 1) ? false : !objDis.disable}
                           fullWidth
                           component={StyledTextField}
                           label="Идентификатор"
