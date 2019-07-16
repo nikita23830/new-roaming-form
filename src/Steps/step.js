@@ -28,6 +28,8 @@ import {
 
 import { limit } from '../Utils'
 
+import { composeValidators, required, mustBeLenght, checkMail } from '../Validate/newIndex'
+
 const DEFAULT_OBJECT = {
   senderClient: {...DEFAULT_SENDER_CLIENT},
   senderOperator: {...DEFAULT_SENDER_OPERATOR},
@@ -57,119 +59,26 @@ class StepContents extends Component {
 
   render () {
     const { type, activeStep, finalformApi, valuesFinalForm, mutatorsFinalForm } = this.props
-    const nameFieldArray = `${activeStep === 0 ? 'sender' : 'receiver'}${type}`
-
-    let but = {}
-    let need_dop = valuesFinalForm[`${type}file`] ? true : false
-    let disabelInn = valuesFinalForm[`${nameFieldArray}file`] ? true : false
-    let filename = valuesFinalForm[`${type}file`] ? valuesFinalForm[`${type}file`].name : false
-
-    if (activeStep === 1 && type === 'Client' && !need_dop) {
-      valuesFinalForm[nameFieldArray].forEach((item, index) => {
-        let { operator } = valuesFinalForm[nameFieldArray][index]
-        need_dop = ELITE_OPERATORS.indexOf(operator) !== -1 ? true : need_dop
-      })
-    }
-
+    const nameField = `${activeStep === 0 ? 'sender' : 'receiver'}${type}`
     return (
       <>
         <FieldArray name={nameFieldArray}>
           {({ fields }) => (
             <>
               {fields.map((key, index) => {
-                let objDis = valuesFinalForm[nameFieldArray][index]
-                  ? limit(valuesFinalForm[nameFieldArray][index])
-                  : { disable: true, disableKpp: true, typeUl: true, number: false }
-                but = {
-                  addDisable: fields.length > 99 ? true : false,
-                  deleteColor: fields.length === 1 ? 'default' : 'primary',
-                  deleteDisable: fields.length === 1 ? true : false
-                }
 
-                if (finalformApi) finalformApi.submit()
                 return (
-                <>
-                  <MainCard>
-                    <StyledGrid container spacing={1}>
-                      <Grid item xs={12} sm={6}>
-                          <Field
-                            fullWidth
-                            disabled={disabelInn}
-                            required={!disabelInn}
-                            component={StyledTextField}
-                            label="ИНН"
-                            name={`${key}.inn`}
-                            parse={formatStringByPattern("999999999999")}
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                          <Field
-                            disabled={objDis.disableKpp}
-                            required={!objDis.disableKpp}
-                            fullWidth
-                            component={StyledTextField}
-                            label="КПП"
-                            name={`${key}.kpp`}
-                            parse={formatStringByPattern("999999999")}
-                          />
-                        </Grid>
-                      </StyledGrid>
+                  <>
+                    <MainCard>
 
-                      <NameAndFio
-                        disable={objDis.disable}
-                        typeUL={objDis.typeUl}
-                        insertkey={key}
-                        component={StyledTextField}
-                      />
-
-                      {!(type === 'Client' && activeStep === 1) && <StyledGrid item xs={12} sm={12}>
-                        <Field
-                          disabled={objDis.disable}
-                          required={(type === 'Operator' && activeStep === 1) ? false : !objDis.disable}
-                          fullWidth
-                          component={StyledTextField}
-                          label="Идентификатор"
-                          name={`${key}.id`}
-                          parse={parse}
+                      {Object.keys(DEFAULT_FIELD[nameField]).forEach((item, index) => (
+                        <FieldStep
+                          name={item}
+                          label={item}
+                          itemKey={key}
+                          xs={(item === 'inn' || item === 'kpp') ? 6 : 12}
                         />
-                      </StyledGrid>}
-                      {objDis.number && <StyledGrid item xs={12} sm={12}>
-                        <Field
-                          disabled={objDis.disable}
-                          required={!objDis.disable}
-                          fullWidth
-                          component={StyledTextField}
-                          label="Номер заявки"
-                          name={`${key}.number`}
-                          parse={formatStringByPattern("999999")}
-                        />
-                      </StyledGrid>}
-                      {(activeStep === 0 && type === 'Client') && <StyledGrid item xs={12} sm={12}>
-                        <Field
-                          disabled={objDis.disable}
-                          required={!objDis.disable}
-                          fullWidth
-                          component={StyledTextField}
-                          label="E-mail"
-                          name={`${key}.email`}
-                        />
-                      </StyledGrid>}
-                      {(type === 'Client' && activeStep === 1) && <StyledGrid item xs={12} sm={12}>
-                        <Field
-                          disabled={objDis.disable}
-                          required={!objDis.disable}
-                          name={`${key}.operator`}
-                          label="Выберете оператора"
-                          component={Select}
-                          formControlProps={{ fullWidth: true }}
-                        >
-                          {OPERATORS.map(option => (
-                            <MenuItem key={option.value} value={option.value}>
-                              {option.label}
-                            </MenuItem>
-                          ))}
-                        </Field>
-                      </StyledGrid>}
+                      ))}
 
                       {!(type === 'Client' && activeStep === 0) && <StyledIconButton
                         disabled={but.deleteDisable}
@@ -243,12 +152,6 @@ class StepContents extends Component {
   }
 };
 
-const parse = value => {
-  const someFormat = formatStringByPattern(
-    "XXXXXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-  );
-  let newValue = someFormat(value.toUpperCase());
-  return newValue;
-};
+
 
 export default StepContents

@@ -48,7 +48,7 @@ class Client extends Component {
     const STEP_GLOBAL = name === 'Client' ? [...STEP_CLIENT] : [...STEP_OPERATOR]
     let valid = false
     if (finalformApi) valid = finalformApi.getState().valid
-    if (finalformApi) console.log(finalformApi.getState())
+
     return (
       <MainCard>
         <Typography component="h1" variant="h4" align="center">
@@ -105,7 +105,7 @@ class Client extends Component {
           <Button
             variant="outlined"
             color="primary"
-            onClick={activeStep === 2 ? this.handleSend : this.handleNext}
+            onClick={activeStep === 2 ? this.handleSend : this.handleSend}
             disabled={!valid}
           >
             {activeStep !== 2 ? 'Вперед' : 'Отправить'}

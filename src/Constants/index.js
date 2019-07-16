@@ -15,46 +15,35 @@ export const STEP = {
   Operator: [...STEP_OPERATOR]
 }
 
-export const DEFAULT_SENDER_CLIENT = {
-  id: '',
+export const DEFAULT_OBJECT_FIELD = {
   inn: '',
   kpp: '',
   name: '',
   lastname: '',
   firstname: '',
-  patronymic: '',
+  patronymic: ''
+}
+
+export const DEFAULT_SENDER_CLIENT = {
+  ...DEFAULT_OBJECT_FIELD,
+  id: '',
   email: '',
 }
 
 export const DEFAULT_RECEIVER_CLIENT = {
-  inn: '',
-  kpp: '',
-  name: '',
-  lastname: '',
-  firstname: '',
-  patronymic: '',
+  ...DEFAULT_OBJECT_FIELD,
   operator: '',
 }
 
 export const DEFAULT_SENDER_OPERATOR = {
+  ...DEFAULT_OBJECT_FIELD,
   id: '',
-  inn: '',
-  kpp: '',
-  name: '',
-  lastname: '',
-  firstname: '',
-  patronymic: '',
   number: '',
 }
 
 export const DEFAULT_RECEIVER_OPERATOR = {
+  ...DEFAULT_OBJECT_FIELD,
   id: '',
-  inn: '',
-  kpp: '',
-  name: '',
-  lastname: '',
-  firstname: '',
-  patronymic: '',
 }
 
 export const OPERATORS = [
@@ -100,10 +89,3 @@ export const EXPANSION = [
   'files',
   'receiver'
 ]
-
-export const DEFAULT_OBJECT_VALIDATE = {
-  senderClient: [...Object.keys(DEFAULT_SENDER_CLIENT)],
-  senderOperator: [...Object.keys(DEFAULT_SENDER_OPERATOR)],
-  receiverClient: [...Object.keys(DEFAULT_RECEIVER_CLIENT)],
-  receiverOperator: [...Object.keys(DEFAULT_RECEIVER_OPERATOR)]
-}

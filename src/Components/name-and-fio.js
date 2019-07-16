@@ -4,6 +4,8 @@ import { Field } from "react-final-form";
 
 import { StyledGrid } from '../StyledComponents/step/'
 
+import { composeValidators, required } from '../Validate/newIndex'
+
 export const NameAndFio = props => {
   const { typeUL, disable, insertkey, component } = props
 
@@ -17,6 +19,7 @@ export const NameAndFio = props => {
           name={`${insertkey}.name`}
           label='Название организации'
           component={component}
+          validate={composeValidators(required)}
         />
       </StyledGrid>}
       {!typeUL && <StyledGrid container spacing={1}>
@@ -28,6 +31,7 @@ export const NameAndFio = props => {
             name={`${insertkey}.lastname`}
             label='Имя'
             component={component}
+            validate={composeValidators(required)}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -38,6 +42,7 @@ export const NameAndFio = props => {
             name={`${insertkey}.firstname`}
             label='Фамилия'
             component={component}
+            validate={composeValidators(required)}
           />
         </Grid>
         <Grid item xs={12} sm={4}>
@@ -47,6 +52,7 @@ export const NameAndFio = props => {
             name={`${insertkey}.patronymic`}
             label='Отчество'
             component={component}
+            validate={composeValidators(required)}
           />
         </Grid>
       </StyledGrid>}
