@@ -6,7 +6,7 @@ import {
   Stepper,
   StepButton,
   Collapse,
-  Modal,
+  Modal
 } from "@material-ui/core";
 import { CancelOutlined } from "@material-ui/icons";
 import {
@@ -37,7 +37,7 @@ class Client extends Component {
   handleSend = () => {};
 
   render() {
-    const { activeStep, openModalFile, disabledSend } = this.state;
+    const { activeStep, openModalFile } = this.state;
     const {
       finalformApi,
       valuesFinalForm,
@@ -58,7 +58,14 @@ class Client extends Component {
         <Stepper nonLinear activeStep={activeStep}>
           {STEP_GLOBAL.map((label, index) => (
             <Step key={label}>
-              <StepButton onClick={this.handleStep(index)}>{label}</StepButton>
+              <StepButton
+                onClick={this.handleStep(index)}
+                style={{ margin: "-10px", padding: "10px 8px" }}
+              >
+                <Typography variant="subtitle2" align="left">
+                  {label}
+                </Typography>
+              </StepButton>
             </Step>
           ))}
         </Stepper>
