@@ -17,7 +17,6 @@ import {
   StyledDiv,
   StyledButton,
   StyledTypography,
-  StyledExpansionPanel,
   StyleListExpansionPanel,
   Styledp,
   StyledAvatar,
@@ -78,13 +77,13 @@ class Summary extends Component {
 
     return (
       <>
-        {showErrors && <StyledExpansionPanel>
+        {showErrors && <ExpansionPanel>
           <ExpansionPanelSummary expandIcon={<ExpandMore color='secondary'/>}>
             <StyledTypography>Некорретные данные</StyledTypography>
           </ExpansionPanelSummary>
           <ExpansionPanelDetails>
             <StyledDiv>
-              <StyledTypography>Некорретные или неполные данные. Перейдите на нужный этап для исправления ошибок</StyledTypography>
+              <Typography>Некорретные или неполные данные. Перейдите на нужный этап для исправления ошибок.</Typography>
               {(!showSender && !files[0]) && <Grid item sm={12} sx={4}>
                 <StyledButton variant="outlined" aria-label="Delete" color='primary' onClick={handleStep(0)} >
                   {STEP[type][0]}
@@ -99,7 +98,7 @@ class Summary extends Component {
               </Grid>}
             </StyledDiv>
           </ExpansionPanelDetails>
-        </StyledExpansionPanel>}
+        </ExpansionPanel>}
 
         {showSender && <Typography variant="h6">{STEP[type][0]}</Typography>}
         {showSender && objSender.map(item => (

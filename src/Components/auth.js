@@ -2,18 +2,11 @@ import React, { Component } from "react";
 import {
   Typography,
   Button,
-  Step,
-  Stepper,
-  StepButton,
-  Collapse
 } from "@material-ui/core";
 import { Field } from "react-final-form";
 
-import { StyledCollapse, AuthCard, StyledTextField, MainCard, StyledGrid, StyledCollapseClient } from '../StyledComponents/components/auth/'
-import { axiosAPI } from '../Utils/axios'
-import { STEP_OPERATOR } from '../Constants'
-import StepContents from '../Steps/step'
-import TypeUploadData from './type-upload-data'
+import { StyledCollapse, AuthCard, StyledTextField,  StyledCollapseClient } from '../StyledComponents/components/auth/'
+
 import Client from './client'
 
 class Auth extends Component {

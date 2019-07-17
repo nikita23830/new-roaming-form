@@ -1,24 +1,23 @@
 import React, { Component } from "react";
 import { Paper, Tab, Tabs } from "@material-ui/core";
 import { Person, Business, SignalCellularAlt } from "@material-ui/icons";
-import { Form } from 'react-final-form'
-import styled from 'styled-components'
-import arrayMutators from 'final-form-arrays'
-import { SnackbarProvider, withSnackbar } from 'notistack';
+import { Form } from "react-final-form";
+import arrayMutators from "final-form-arrays";
+import { SnackbarProvider } from "notistack";
 
-import { FormDiv, Div } from './StyledComponents/'
+import { FormDiv, Div } from "./StyledComponents/";
 import {
   DEFAULT_SENDER_CLIENT,
   DEFAULT_SENDER_OPERATOR,
   DEFAULT_RECEIVER_CLIENT,
   DEFAULT_RECEIVER_OPERATOR
-} from './Constants'
+} from "./Constants";
 
-import Auth from './Components/auth'
-import State from './Components/state'
-import Client from './Components/client'
+import Auth from "./Components/auth";
+import State from "./Components/state";
+import Client from "./Components/client";
 
-import { validate } from './Validate'
+import { validate } from "./Validate";
 
 class App extends Component {
   state = {
@@ -26,7 +25,7 @@ class App extends Component {
   };
 
   handleChange = value => e => {
-    this.setState({ activePage: value })
+    this.setState({ activePage: value });
   };
 
   bindFormApi = formApi => {
@@ -37,7 +36,7 @@ class App extends Component {
 
   onSubmitFinalForm = json => {
     // console.log(json)
-  }
+  };
 
   render() {
     const { activePage } = this.state;
@@ -51,10 +50,16 @@ class App extends Component {
           ...arrayMutators
         }}
         initialValues={{
-          senderClient: [(activePage === 0) ? {...DEFAULT_SENDER_CLIENT} : {}],
-          senderOperator: [(activePage === 1) ? {...DEFAULT_SENDER_OPERATOR} : {}],
-          receiverClient: [(activePage === 0) ? {...DEFAULT_RECEIVER_CLIENT} : {}],
-          receiverOperator: [(activePage === 1) ? {...DEFAULT_RECEIVER_OPERATOR} : {}],
+          senderClient: [activePage === 0 ? { ...DEFAULT_SENDER_CLIENT } : {}],
+          senderOperator: [
+            activePage === 1 ? { ...DEFAULT_SENDER_OPERATOR } : {}
+          ],
+          receiverClient: [
+            activePage === 0 ? { ...DEFAULT_RECEIVER_CLIENT } : {}
+          ],
+          receiverOperator: [
+            activePage === 1 ? { ...DEFAULT_RECEIVER_OPERATOR } : {}
+          ]
         }}
         render={({
           handleSubmit,
@@ -64,9 +69,9 @@ class App extends Component {
           values,
           form,
           errors,
-          touched,
+          touched
         }) => {
-          const { change, mutators } = form
+          const { change, mutators } = form;
 
           return (
             <SnackbarProvider maxSnack={10}>
@@ -100,18 +105,16 @@ class App extends Component {
 
               <FormDiv onSubmit={handleSubmit}>
                 <Div>
-
                   {getStepContent({
                     activePage,
                     values,
                     mutators,
-                    formApi: this.formApi,
+                    formApi: this.formApi
                   })}
-
                 </Div>
               </FormDiv>
             </SnackbarProvider>
-          )
+          );
         }}
       />
     );
@@ -121,25 +124,27 @@ class App extends Component {
 const getStepContent = ({ activePage, values, mutators, formApi }) => {
   switch (activePage) {
     case 0:
-      return <Client
-        name='Client'
-        finalformApi={formApi}
-        valuesFinalForm={values}
-        mutatorsFinalForm={mutators}
-      />;
+      return (
+        <Client
+          name="Client"
+          finalformApi={formApi}
+          valuesFinalForm={values}
+          mutatorsFinalForm={mutators}
+        />
+      );
     case 1:
-      return <Auth
-        finalformApi={formApi}
-        valuesFinalForm={values}
-        mutatorsFinalForm={mutators}
-      />;
+      return (
+        <Auth
+          finalformApi={formApi}
+          valuesFinalForm={values}
+          mutatorsFinalForm={mutators}
+        />
+      );
     case 2:
       return <State />;
     default:
       throw new Error("Unknown step");
   }
 };
-
-
 
 export default App;
