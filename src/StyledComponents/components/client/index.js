@@ -63,15 +63,15 @@ export const ModalDiv = styled.div`
   flex-direction: column;
   background-color: #fff;
   padding: 30px;
-  border-radius: 25px;
+  border-radius: 4px;
   box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 1);
   outline: none;
 `
-export const TypographyError = styled(Typography)`
- && {
-   color: #f00;
-  }
-`
+// export const TypographyError = styled(Typography)`
+//  && {
+//    color: #f00;
+//   }
+// `
 
 export const StyledIconButton = styled(IconButton)`
  && {

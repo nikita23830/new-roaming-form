@@ -28,17 +28,10 @@ export const StyledTypography = styled(Typography)`
   }
 `
 
-export const StyledExpansionPanel = styled(ExpansionPanel)`
- && {
-   border: 1px solid #f00;
-  }
-`
-
 export const StyleListExpansionPanel = styled(ExpansionPanel)`
  && {
    margin-top: 5px;
    margin-botom: 5px;
-   border: 1px solid #6a1b9a;
   }
 `
 
