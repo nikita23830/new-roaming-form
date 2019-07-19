@@ -27,8 +27,11 @@ import {
   DEFAULT_RECEIVER_OPERATOR
 } from "../Constants";
 
-import { ButtonUpload } from 'Components/Button/ButtonUpload'
 import { DefaultChip } from 'Components/Chip'
+import { ButtonCloseSnackbar } from 'Components/Button/ButtonCloseSnackbar'
+import { ButtonUpload } from 'Components/Button/ButtonUpload'
+import { DataConsumer } from 'Utils/context'
+
 
 class TypeUploadData extends Component {
   state = {
@@ -50,33 +53,17 @@ class TypeUploadData extends Component {
         variant: "success",
         persist: true,
         action: key => (
-          <IconButton
-            style={{ color: "#fff" }}
-            onClick={() => {
-              closeSnackbar(key);
-            }}
-          >
-            <DeleteOutline />
-          </IconButton>
+          <ButtonCloseSnackbar close={closeSnackbar} key={key} />
         )
       });
       finalformApi.change(`${nameField}file`, files);
       finalformApi.change(nameField, [{ ...DEFAULT_OBJECT[nameField] }]);
     } else
-      enqueueSnackbar(
-        'Файл должен иметь расширение ".xls" или ".xlsx"',
-        {
+      enqueueSnackbar('Файл должен иметь расширение ".xls" или ".xlsx"', {
           variant: "error",
           persist: true,
           action: key => (
-            <IconButton
-              style={{ color: "#fff" }}
-              onClick={() => {
-                closeSnackbar(key);
-              }}
-            >
-              <DeleteOutline />
-            </IconButton>
+            <ButtonCloseSnackbar close={closeSnackbar} key={key} />
           )
         }
       );
@@ -87,35 +74,32 @@ class TypeUploadData extends Component {
   handleClose = () => this.setState({ openSnackbar: false });
 
   render() {
-    const { openSnackbar, textSnackbar } = this.state;
-    const { activeStep, type, handleModalOpen, finalformApi } = this.props;
-    const nameField = `${activeStep === 0 ? "sender" : "receiver"}${type}file`;
-    let checkFile = false;
-    let nameFile = "";
-    if (finalformApi) {
-      const { values } = finalformApi.getState();
-      if (values && values[nameField]) {
-        checkFile = true;
-        nameFile = values[nameField].name;
-      }
-    }
-
     return (
-      <>
-      <StyledTypeGrid container spacing={1}>
-        <StyledGrid item sm={12} xs={10}>
-          <Typography variant="h6">
-            Вы можете загрузить список файлом
-            <IconButton aria-label="Close" onClick={handleModalOpen}>
-              <HelpOutline color="primary" />
-            </IconButton>
-          </Typography>
-
-          {!checkFile && <ButtonUpload accept='.xls, .xlsx' uploadFile={this.uploadFile} text='Выбрать файл' />}
-          {checkFile && <DefaultChip nameField={nameField} handleDeleteFile={this.handleDeleteFile} />}
-        </StyledGrid>
-      </StyledTypeGrid>
-      </>
+      <DataConsumer>
+      {context => {
+        const { activeStep, type, handleModalOpen } = this.props;
+        const nameField = `${activeStep === 0 ? "sender" : "receiver"}${type}file`;
+        let checkFile = false
+        if (context && context.formApi) {
+          const { values } = context.formApi.getState()
+          checkFile = values[nameField] ? true : false
+        }
+        return (
+          <StyledTypeGrid container spacing={1}>
+            <StyledGrid item sm={12} xs={10}>
+              <Typography variant="h6">
+                Вы можете загрузить список файлом
+                <IconButton aria-label="Close" onClick={handleModalOpen}>
+                  <HelpOutline color="primary" />
+                </IconButton>
+              </Typography>
+              {!checkFile && <ButtonUpload accept='.xls, .xlsx' uploadFile={this.uploadFile} text='Выбрать файл' />}
+              {checkFile && <DefaultChip nameField={nameField} handleDeleteFile={this.handleDeleteFile} />}
+            </StyledGrid>
+          </StyledTypeGrid>
+        )
+      }}
+      </DataConsumer>
     );
   }
 }
