@@ -6,114 +6,36 @@ import arrayMutators from "final-form-arrays";
 import { SnackbarProvider } from "notistack";
 
 import { FormDiv, Div } from "./StyledComponents/";
-import {
-  DEFAULT_SENDER_CLIENT,
-  DEFAULT_SENDER_OPERATOR,
-  DEFAULT_RECEIVER_CLIENT,
-  DEFAULT_RECEIVER_OPERATOR
-} from "./Constants";
 
-import Auth from "./Components/auth";
-import State from "./Components/state";
-import Client from "./Components/client";
+import Auth from "Components/auth";
+import State from "Components/state";
+import Client from "Components/client";
+import DefaultTabs from 'Components/Tabs'
 
 class App extends Component {
-  state = {
-    activePage: 1
-  };
+  state = { activePage: 1 };
 
-  handleChange = value => e => {
-    this.setState({ activePage: value });
-  };
-
-  bindFormApi = formApi => {
-    this.formApi = formApi;
-    const unsubscribe = () => {};
-    return unsubscribe;
-  };
-
-  onSubmitFinalForm = json => {
-    // console.log(json)
-  };
+  handleChange = value => e => this.setState({ activePage: value });
 
   render() {
     const { activePage } = this.state;
+    const { values, mutators, formApi } = this.props
 
     return (
-      <Form
-        onSubmit={this.onSubmitFinalForm}
-        decorators={[this.bindFormApi]}
-        mutators={{
-          ...arrayMutators
-        }}
-        initialValues={{
-          senderClient: [activePage === 0 ? { ...DEFAULT_SENDER_CLIENT } : {}],
-          senderOperator: [
-            activePage === 1 ? { ...DEFAULT_SENDER_OPERATOR } : {}
-          ],
-          receiverClient: [
-            activePage === 0 ? { ...DEFAULT_RECEIVER_CLIENT } : {}
-          ],
-          receiverOperator: [
-            activePage === 1 ? { ...DEFAULT_RECEIVER_OPERATOR } : {}
-          ]
-        }}
-        render={({
-          handleSubmit,
-          reset,
-          submitting,
-          pristine,
-          values,
-          form,
-          errors,
-          touched
-        }) => {
-          const { change, mutators } = form;
+      <>
+        <DefaultTabs activePage={activePage} handleChange={this.handleChange} />
 
-          return (
-            <SnackbarProvider maxSnack={10}>
-              <Paper square>
-                <Tabs
-                  value={activePage}
-                  variant="fullWidth"
-                  indicatorColor="primary"
-                  textColor="primary"
-                >
-                  <Tab
-                    icon={<Person />}
-                    label="Клиентам"
-                    value={0}
-                    onClick={this.handleChange(0)}
-                  />
-                  <Tab
-                    icon={<Business />}
-                    label="Операторам"
-                    value={1}
-                    onClick={this.handleChange(1)}
-                  />
-                  <Tab
-                    icon={<SignalCellularAlt />}
-                    label="Состояние роуминга"
-                    value={2}
-                    onClick={this.handleChange(2)}
-                  />
-                </Tabs>
-              </Paper>
-
-              <FormDiv onSubmit={handleSubmit}>
-                <Div>
-                  {getStepContent({
-                    activePage,
-                    values,
-                    mutators,
-                    formApi: this.formApi
-                  })}
-                </Div>
-              </FormDiv>
-            </SnackbarProvider>
-          );
-        }}
-      />
+        <FormDiv>
+          <Div>
+            {getStepContent({
+              activePage,
+              values,
+              mutators,
+              formApi: formApi
+            })}
+          </Div>
+        </FormDiv>
+      </>
     );
   }
 }

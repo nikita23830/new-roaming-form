@@ -22,6 +22,9 @@ import TypeUploadData from "./type-upload-data";
 import Summary from "../Steps/summary";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 
+import { DefaultStepper } from 'Components/Stepper'
+import { ButtonNavigate } from 'Components/Button/ButtonNavigate'
+
 class Client extends Component {
   state = {
     activeStep: 0,
@@ -52,23 +55,8 @@ class Client extends Component {
     if (finalformApi) console.log(finalformApi.getState());
     return (
       <MainCard>
-        <Typography component="h1" variant="h4" align="center">
-          Заявление на подключение роуминга между контрагентами
-        </Typography>
-        <Stepper nonLinear activeStep={activeStep}>
-          {STEP_GLOBAL.map((label, index) => (
-            <Step key={label}>
-              <StepButton
-                onClick={this.handleStep(index)}
-                style={{ margin: "-10px", padding: "10px 8px" }}
-              >
-                <Typography variant="subtitle2" align="left">
-                  {label}
-                </Typography>
-              </StepButton>
-            </Step>
-          ))}
-        </Stepper>
+
+        <DefaultStepper activeStep={activeStep} handleStep={this.handleStep} steps={STEP_GLOBAL} />
 
         <Collapse in={activeStep < 2}>
           {!(activeStep === 0 && name === "Client") && (
@@ -100,24 +88,13 @@ class Client extends Component {
           />
         </Collapse>
 
-        <StyledGrid>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={activeStep === 0 ? null : this.handleBack}
-            disabled={activeStep === 0 ? true : false}
-          >
-            Назад
-          </Button>
-          <Button
-            variant="outlined"
-            color="primary"
-            onClick={activeStep === 2 ? this.handleSend : this.handleNext}
-            disabled={!valid}
-          >
-            {activeStep !== 2 ? "Вперед" : "Отправить"}
-          </Button>
-        </StyledGrid>
+        <ButtonNavigate
+          activeStep={activeStep}
+          handleBack={this.handleBack}
+          handleNext={this.handleNext}
+          handleSend={this.handleSend}
+        />
+
 
         <Modal open={openModalFile} onClose={this.handleModalClose}>
           <ModalDiv>

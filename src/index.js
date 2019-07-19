@@ -4,7 +4,7 @@ import { SnackbarProvider } from 'notistack';
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 import purple from "@material-ui/core/colors/purple";
 
-import App from "./App";
+import FinalForm from "./form";
 
 const theme = createMuiTheme({
   palette: {
@@ -25,7 +25,7 @@ const theme = createMuiTheme({
 render(
   <SnackbarProvider maxSnack={3}>
     <MuiThemeProvider theme={theme}>
-      <App />
+      <FinalForm />
     </MuiThemeProvider>
   </SnackbarProvider>,
   document.getElementById("root")
