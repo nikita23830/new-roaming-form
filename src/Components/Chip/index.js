@@ -4,15 +4,11 @@ import { Chip, Avatar } from '@material-ui/core'
 import { AttachFileRounded } from '@material-ui/icons'
 import { DataConsumer } from 'Utils/context'
 
-export const DefaultChip = ({ nameField, handleDeleteFile }) => (
+export const DefaultChip = ({ nameField, handleDeleteFile, file }) => (
   <DataConsumer>
   {context => {
     let finalformApi = undefined
-    let file = undefined
-    if (context && context.formApi) {
-      finalformApi = context.formApi
-      file = finalformApi.getState().values[nameField]
-    }
+    if (context && context.formApi) finalformApi = context.formApi
     return (
       <Chip
         avatar={

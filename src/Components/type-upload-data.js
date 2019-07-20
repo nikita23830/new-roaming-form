@@ -82,7 +82,7 @@ class TypeUploadData extends Component {
         let checkFile = false
         if (context && context.formApi) {
           const { values } = context.formApi.getState()
-          checkFile = values[nameField] ? true : false
+          checkFile = values[nameField]
         }
         return (
           <StyledTypeGrid container spacing={1}>
@@ -94,7 +94,7 @@ class TypeUploadData extends Component {
                 </IconButton>
               </Typography>
               {!checkFile && <ButtonUpload accept='.xls, .xlsx' uploadFile={this.uploadFile} text='Выбрать файл' />}
-              {checkFile && <DefaultChip nameField={nameField} handleDeleteFile={this.handleDeleteFile} />}
+              {checkFile && <DefaultChip nameField={nameField} handleDeleteFile={this.handleDeleteFile} file={checkFile} />}
             </StyledGrid>
           </StyledTypeGrid>
         )
