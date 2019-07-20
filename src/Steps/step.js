@@ -38,7 +38,7 @@ import { DefaultField } from 'Components/Fields'
 import { DefaultSelect } from 'Components/Select'
 import { ButtonDeleteField } from 'Components/Button/ButtonDeleteField'
 import ParseFile from 'Components/ParseFile'
-
+import { DefaultStep } from 'Components/Step'
 import { limit } from "../Utils";
 
 const DEFAULT_OBJECT = {
@@ -89,44 +89,12 @@ class StepContents extends Component {
               {fields.map((key, index) => {
                 return (
                   <>
-                    {!list && <MainCard>
-                      <Grid container spacing={1}>
-
-                        {DEFAULT_OBJECT_VALIDATE[nameFieldArray].map(item => {
-                          const { value } = fields
-                          const fio = ['lastname', 'firstname', 'patronymic']
-                          let sm = 12
-                          let showUL = (value[index]['inn'].length === 12) ? false : true
-                          let showField = true
-                          if (fio.indexOf(item) !== -1) sm = 4
-                          if (item === 'kpp' || item === 'inn') sm = (item === 'inn' && !showUL) ? 12 : 6
-
-                          showField = (item === 'name' && !showUL) ? false : showField
-                          showField = ((fio.indexOf(item) !== -1) && showUL) ? false : showField
-                          showField = (item === 'kpp' && !showUL) ? false : showField
-
-                          return (
-                            <>
-                              {showField && <Grid item xs={12} sm={sm}>
-                                {item !== 'operator' && <DefaultField
-                                  label={NAMED_FIELD[item]}
-                                  name={item}
-                                  nameFieldArray={nameFieldArray}
-                                  indexKey={key}
-                                />}
-                                {item === 'operator' && <DefaultSelect
-                                  label={NAMED_FIELD[item]}
-                                  name={item}
-                                  nameFieldArray={nameFieldArray}
-                                  indexKey={key}
-                                />}
-                              </Grid>}
-                            </>
-                          )
-                        })}
-                      </Grid>
-                      <ButtonDeleteField nameFieldArray={nameFieldArray} index={index} length={fields.length} />
-                    </MainCard>}
+                    {!list && <DefaultStep
+                      nameFieldArray={nameFieldArray}
+                      fields={fields}
+                      indexKey={key}
+                      index={index}
+                    />}
                     {list && <ParseFile file={list} />}
                   </>
                 );

@@ -1,10 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Card, Grid } from '@material-ui/core'
-import { DefaultField } from 'Components/Field'
+import { DefaultField } from 'Components/Fields'
 import { DefaultSelect } from 'Components/Select'
+import { ButtonDeleteField } from 'Components/Button/ButtonDeleteField'
+import { DEFAULT_OBJECT_VALIDATE, NAMED_FIELD } from "Constants"
 
-export const DefaultStep = (data) => (
+export const DefaultStep = ({ nameFieldArray, fields, indexKey, index }) => (
   <MainCard>
     <Grid container spacing={1}>
       {DEFAULT_OBJECT_VALIDATE[nameFieldArray].map(item => {
@@ -27,13 +29,13 @@ export const DefaultStep = (data) => (
                 label={NAMED_FIELD[item]}
                 name={item}
                 nameFieldArray={nameFieldArray}
-                indexKey={key}
+                indexKey={indexKey}
               />}
               {item === 'operator' && <DefaultSelect
                 label={NAMED_FIELD[item]}
                 name={item}
                 nameFieldArray={nameFieldArray}
-                indexKey={key}
+                indexKey={indexKey}
               />}
             </Grid>}
           </>
