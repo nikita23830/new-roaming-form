@@ -23,7 +23,7 @@ import Summary from "../Steps/summary";
 import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 
 import { DefaultStepper } from 'Components/Stepper'
-import { ButtonNavigate } from 'Components/Button/ButtonNavigate'
+import { ButtonNavigate } from 'Components/Button'
 import { DefaultModal } from 'Components/Modal'
 
 class Client extends Component {

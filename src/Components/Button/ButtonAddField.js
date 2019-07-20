@@ -3,7 +3,7 @@ import { Button } from '@material-ui/core'
 import { COMMON_OBJECT } from 'Constants/Components/Button'
 import { DataConsumer } from 'Utils/context'
 
-export const ButtonAddField = ({ activeStep, nameFieldArray, length }) => (
+const ButtonAddField = ({ activeStep, nameFieldArray, length }) => (
   <DataConsumer>
   {context => {
     let push = undefined
@@ -27,3 +27,5 @@ export const ButtonAddField = ({ activeStep, nameFieldArray, length }) => (
   }}
   </DataConsumer>
 )
+
+export default ButtonAddField

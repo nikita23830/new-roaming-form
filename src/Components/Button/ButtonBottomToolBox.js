@@ -1,17 +1,32 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Grid } from '@material-ui/core'
-import { ButtonAddField } from 'Components/Button/ButtonAddField';
-import { ButtonUpload } from 'Components/Button/ButtonUpload';
+import { ButtonAddField, ButtonUpload } from 'Components/Button';
 import { DefaultChip } from 'Components/Chip'
+import { DataConsumer } from 'Utils/context'
 
-export const ButtonBottomToolBox = ({activeStep, nameFieldArray, length, uploadFile, handleDeleteFile, checkFile}) => (
-  <GridButton container>
-    <ButtonAddField activeStep={activeStep} nameFieldArray={nameFieldArray} length={length} />
+const ButtonBottomToolBox = ({activeStep, nameFieldArray, length, uploadFile, handleDeleteFile, checkFile}) => (
+  <DataConsumer>
+  {context => {
 
-    {!checkFile && <ButtonUpload accept='.pdf' uploadFile={uploadFile} text='Загрузить доп. соглашение' />}
-    {checkFile && <DefaultChip nameField={undefined} handleDeleteFile={handleDeleteFile} file={checkFile} />}
-  </GridButton>
+    return (
+      <GridButton container>
+        <ButtonAddField activeStep={activeStep} nameFieldArray={nameFieldArray} length={length} />
+
+        {!checkFile && nameFieldArray === 'receiverClient' && <ButtonUpload
+          accept='.pdf'
+          uploadFile={uploadFile}
+          text='Загрузить доп. соглашение'
+        />}
+        {checkFile && nameFieldArray === 'receiverClient' && <DefaultChip
+          nameField={undefined}
+          handleDeleteFile={handleDeleteFile}
+          file={checkFile}
+        />}
+      </GridButton>
+    )
+  }}
+  </DataConsumer>
 )
 
 const GridButton = styled(Grid)` && {
@@ -20,3 +35,5 @@ const GridButton = styled(Grid)` && {
   display: flex;
   justify-content: space-between;
 }`;
+
+export default ButtonBottomToolBox

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Button } from '@material-ui/core'
 import { DataConsumer } from 'Utils/context'
 
-export const ButtonUpload = ({ accept, uploadFile, text }) => (
+const ButtonUpload = ({ accept, uploadFile, text }) => (
   <DataConsumer>
   {context => {
     const buttonKey = Math.random().toString(36).substring(2);
@@ -36,3 +36,5 @@ export const ButtonUpload = ({ accept, uploadFile, text }) => (
 const Styledinput = styled.input` && {
   display: none;
 }`
+
+export default ButtonUpload

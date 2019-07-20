@@ -4,7 +4,7 @@ import { IconButton } from '@material-ui/core'
 import { DeleteOutlined } from '@material-ui/icons'
 import { DataConsumer } from 'Utils/context'
 
-export const ButtonDeleteField = ({ nameFieldArray, index, length }) => (
+const ButtonDeleteField = ({ nameFieldArray, index, length }) => (
   <DataConsumer>
   {context => {
     let mutators = undefined
@@ -42,3 +42,5 @@ const StyledDeleteOutlined = styled(DeleteOutlined)` &:hover
 {
   animation: ${keyFramesButton} 0.6s ease-in-out both;
 }`;
+
+export default ButtonDeleteField

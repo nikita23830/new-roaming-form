@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { IconButton } from '@material-ui/core'
 import { DeleteOutline } from '@material-ui/icons'
 
-export const ButtonCloseSnackbar = ({ close, key }) => (
+const ButtonCloseSnackbar = ({ close, key }) => (
   <StyledIconButton
     onClick={() => close(key)}
   >
@@ -14,3 +14,5 @@ export const ButtonCloseSnackbar = ({ close, key }) => (
 const StyledIconButton = styled(IconButton)` && {
   color: #fff;
 }`
+
+export default ButtonCloseSnackbar

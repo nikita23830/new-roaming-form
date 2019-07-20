@@ -28,8 +28,7 @@ import {
 } from "../Constants";
 
 import { DefaultChip } from 'Components/Chip'
-import { ButtonCloseSnackbar } from 'Components/Button/ButtonCloseSnackbar'
-import { ButtonUpload } from 'Components/Button/ButtonUpload'
+import { ButtonUpload, ButtonCloseSnackbar } from 'Components/Button'
 import { DataConsumer } from 'Utils/context'
 
 

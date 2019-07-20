@@ -37,11 +37,10 @@ import {
 
 import { DefaultField } from 'Components/Fields'
 import { DefaultSelect } from 'Components/Select'
-import { ButtonDeleteField } from 'Components/Button/ButtonDeleteField'
 import ParseFile from 'Components/ParseFile'
 import { DefaultStep } from 'Components/Step'
 import { limit } from "../Utils";
-import { ButtonBottomToolBox } from 'Components/Button/ButtonBottomToolBox'
+import { ButtonBottomToolBox, ButtonDeleteField } from 'Components/Button'
 
 const DEFAULT_OBJECT = {
   senderClient: { ...DEFAULT_SENDER_CLIENT },
@@ -64,10 +63,9 @@ class StepContents extends Component {
       });
   };
 
-  handleDeleteFile = finalformApi => () => {
+  handleDeleteFile = ({ finalformApi }) => () => {
     const { type } = this.props;
-
-    finalformApi.change(`${type}file`, undefined);
+    if (finalformApi) finalformApi.change(`${type}file`, undefined);
   };
 
   render() {

@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Grid, Button } from '@material-ui/core'
 
-export const ButtonNavigate = ({ activeStep, handleBack, handleNext, handleSend }) => (
+const ButtonNavigate = ({ activeStep, handleBack, handleNext, handleSend }) => (
   <StyledGrid container>
     <BtnGrid item xs={12} sm={6} align='flex-start'>
       <Button
@@ -35,3 +35,5 @@ const BtnGrid = styled(Grid)` && {
   display: flex;
   justify-content: ${(props) => props.align};
 }`
+
+export default ButtonNavigate
