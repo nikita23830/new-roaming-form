@@ -1,119 +1,82 @@
 import React, { Component } from "react";
 import { withSnackbar } from "notistack";
-import {
-  Grid,
-  Button,
-  MenuItem,
-  Chip,
-  InputAdornment
-} from "@material-ui/core";
-import { DeleteOutlined, AttachFileRounded } from "@material-ui/icons";
+import { IconButton } from "@material-ui/core";
+import { DeleteOutline } from "@material-ui/icons";
 import { Field } from "react-final-form";
 import { FieldArray } from "react-final-form-arrays";
-import { Select } from "final-form-material-ui";
-import formatStringByPattern from "format-string-by-pattern";
-
-import {
-  MainCard,
-  StyledTextField,
-  StyledGrid,
-  GridButton,
-  StyledIconButton,
-  Styledinput,
-  StyledAvatar,
-  Styledp
-} from "../StyledComponents/step/";
-import { NameAndFio } from "../Components/name-and-fio";
-import {
-  OPERATORS,
-  ELITE_OPERATORS,
-  DEFAULT_SENDER_CLIENT,
-  DEFAULT_SENDER_OPERATOR,
-  DEFAULT_RECEIVER_CLIENT,
-  DEFAULT_RECEIVER_OPERATOR,
-  DEFAULT_OBJECT_VALIDATE,
-  NAMED_FIELD
-} from "../Constants";
-
 import { DefaultField } from 'Components/Fields'
 import { DefaultSelect } from 'Components/Select'
 import ParseFile from 'Components/ParseFile'
 import { DefaultStep } from 'Components/Step'
-import { limit } from "../Utils";
 import { ButtonBottomToolBox, ButtonDeleteField } from 'Components/Button'
-
-const DEFAULT_OBJECT = {
-  senderClient: { ...DEFAULT_SENDER_CLIENT },
-  senderOperator: { ...DEFAULT_SENDER_OPERATOR },
-  receiverClient: { ...DEFAULT_RECEIVER_CLIENT },
-  receiverOperator: { ...DEFAULT_RECEIVER_OPERATOR }
-};
+import { DataConsumer } from 'Utils/context'
 
 class StepContents extends Component {
   uploadFile = finalformApi => file => {
-    const { type, enqueueSnackbar } = this.props;
+    const { type, enqueueSnackbar, closeSnackbar } = this.props;
     const files = file.target.files[0];
 
     if (files.type === "application/pdf") {
       finalformApi.change(`${type}file`, files);
-    } else
-      enqueueSnackbar({
-        message: 'Файл должен иметь расширение ".pdf"',
-        options: { variant: "error" }
-      });
+    } else enqueueSnackbar('Файл должен иметь расширение .pdf', {
+      variant: 'warning',
+      persist: true,
+      action: (key) => (
+        <IconButton onClick={() => { closeSnackbar(key) }}>
+          <DeleteOutline />
+        </IconButton>
+      )
+    });
   };
 
-  handleDeleteFile = ({ finalformApi }) => () => {
-    const { type } = this.props;
-    if (finalformApi) finalformApi.change(`${type}file`, undefined);
-  };
+  handleDeleteFile = ({ finalformApi }) => () => finalformApi.change(`${this.props.type}file`, undefined);
 
   render() {
-    const {
-      type,
-      activeStep,
-      finalformApi,
-      valuesFinalForm,
-      mutatorsFinalForm
-    } = this.props;
-
-    const nameFieldArray = `${activeStep === 0 ? "sender" : "receiver"}${type}`;
-
-    const list = valuesFinalForm[`${activeStep === 0 ? "sender" : "receiver"}${type}file`]
-
-    const checkFile = valuesFinalForm[`${type}file`]
+    const { type, activeStep } = this.props;
 
     return (
-      <>
-        <FieldArray name={nameFieldArray}>
-          {({ fields }) => (
-            <>
-              {fields.map((key, index) => {
-                return (
-                  <>
-                    {!list && <DefaultStep
-                      nameFieldArray={nameFieldArray}
-                      fields={fields}
-                      indexKey={key}
-                      index={index}
-                    />}
-                    {list && <ParseFile file={list} />}
-                  </>
-                );
-              })}
+      <DataConsumer>
+      {context => {
+        const nameFieldArray = `${activeStep === 0 ? "sender" : "receiver"}${type}`;
+        let list = ''
+        let checkFile = ''
+        if (context && context.formApi) {
+          const { values } = context.formApi.getState()
+          list = values[`${activeStep === 0 ? "sender" : "receiver"}${type}file`]
+          checkFile = values[`${type}file`]
+        }
+        return (
+          <FieldArray name={nameFieldArray}>
+            {({ fields }) => (
+              <>
+                {fields.map((key, index) => {
+                  return (
+                    <>
+                      {!list && <DefaultStep
+                        nameFieldArray={nameFieldArray}
+                        fields={fields}
+                        indexKey={key}
+                        index={index}
+                      />}
+                      {list && <ParseFile file={list} />}
+                    </>
+                  );
+                })}
 
-              <ButtonBottomToolBox
-                activeStep={activeStep}
-                nameFieldArray={nameFieldArray}
-                length={fields.length}
-                uploadFile={this.uploadFile}
-                handleDeleteFile={this.handleDeleteFile}
-                checkFile={checkFile}
-              />
-            </>
-          )}
-        </FieldArray>
-      </>
+                <ButtonBottomToolBox
+                  activeStep={activeStep}
+                  nameFieldArray={nameFieldArray}
+                  length={fields.length}
+                  uploadFile={this.uploadFile}
+                  handleDeleteFile={this.handleDeleteFile}
+                  checkFile={checkFile}
+                />
+              </>
+            )}
+          </FieldArray>
+        )
+      }}
+      </DataConsumer>
     );
   }
 }
