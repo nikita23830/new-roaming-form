@@ -3,7 +3,11 @@ import styled from 'styled-components'
 import { Card, Grid } from '@material-ui/core'
 import { DefaultField } from 'Components/Fields'
 import { DefaultSelect } from 'Components/Select'
+<<<<<<< HEAD
 import { ButtonDeleteField } from 'Components/Button/ButtonDeleteField'
+=======
+import { ButtonDeleteField } from 'Component/Button/ButtonDeleteField'
+>>>>>>> 09836c522d6da43a47ee5acce3745ef0791d37ce
 import { DEFAULT_OBJECT_VALIDATE, NAMED_FIELD } from "Constants"
 
 export const DefaultStep = ({ nameFieldArray, fields, indexKey, index }) => (
