@@ -18,8 +18,8 @@ class ParseFile extends Component {
       if (readFile.length === 1) data = {ul: ['Юридических лиц нет в списке'], ip: ['Индивидуальных предпринимателей нет в списке']}
       else {
         readFile.map(rows => {
-          if (rows[1].length === 10) data['ul'].push(rows[0])
-          if (rows[1].length === 12) data['ip'].push(`ИП ${rows[4]} ${rows[5]} ${rows[6]}`)
+          if (rows[1].length === 10 && rows[0]) data['ul'].push(rows[0])
+          if (rows[1].length === 12 && rows[4] && rows[5]) data['ip'].push(`ИП ${rows[4]} ${rows[5]} ${rows[6]}`)
         })
       }
     }
