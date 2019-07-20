@@ -29,8 +29,15 @@ import {
   DEFAULT_SENDER_CLIENT,
   DEFAULT_SENDER_OPERATOR,
   DEFAULT_RECEIVER_CLIENT,
-  DEFAULT_RECEIVER_OPERATOR
+  DEFAULT_RECEIVER_OPERATOR,
+  DEFAULT_OBJECT_VALIDATE,
+  NAMED_FIELD
 } from "../Constants";
+
+import { DefaultField } from 'Components/Fields'
+import { DefaultSelect } from 'Components/Select'
+import { ButtonDeleteField } from 'Components/Button/ButtonDeleteField'
+import ParseFile from 'Components/ParseFile'
 
 import { limit } from "../Utils";
 
@@ -69,21 +76,10 @@ class StepContents extends Component {
       valuesFinalForm,
       mutatorsFinalForm
     } = this.props;
+
     const nameFieldArray = `${activeStep === 0 ? "sender" : "receiver"}${type}`;
 
-    let but = {};
-    let need_dop = valuesFinalForm[`${type}file`] ? true : false;
-    let disabelInn = valuesFinalForm[`${nameFieldArray}file`] ? true : false;
-    let filename = valuesFinalForm[`${type}file`]
-      ? valuesFinalForm[`${type}file`].name
-      : false;
-
-    if (activeStep === 1 && type === "Client" && !need_dop) {
-      valuesFinalForm[nameFieldArray].forEach((item, index) => {
-        let { operator } = valuesFinalForm[nameFieldArray][index];
-        need_dop = ELITE_OPERATORS.indexOf(operator) !== -1 ? true : need_dop;
-      });
-    }
+    const list =  valuesFinalForm[`${activeStep === 0 ? "sender" : "receiver"}${type}file`]
 
     return (
       <>
@@ -91,134 +87,52 @@ class StepContents extends Component {
           {({ fields }) => (
             <>
               {fields.map((key, index) => {
-                let objDis = valuesFinalForm[nameFieldArray][index]
-                  ? limit(valuesFinalForm[nameFieldArray][index])
-                  : {
-                      disable: true,
-                      disableKpp: true,
-                      typeUl: true,
-                      number: false
-                    };
-                but = {
-                  addDisable: fields.length > 99 ? true : false,
-                  deleteColor: fields.length === 1 ? "default" : "primary",
-                  deleteDisable: fields.length === 1 ? true : false
-                };
-
-                if (finalformApi) finalformApi.submit();
                 return (
                   <>
-                    <MainCard>
-                      <StyledGrid container spacing={1}>
-                        <Grid item xs={12} sm={6}>
-                          <Field
-                            fullWidth
-                            disabled={disabelInn}
-                            required={!disabelInn}
-                            component={StyledTextField}
-                            label="ИНН"
-                            name={`${key}.inn`}
-                            parse={formatStringByPattern("999999999999")}
-                          />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                          <Field
-                            disabled={objDis.disableKpp}
-                            required={!objDis.disableKpp}
-                            fullWidth
-                            component={StyledTextField}
-                            label="КПП"
-                            name={`${key}.kpp`}
-                            parse={formatStringByPattern("999999999")}
-                          />
-                        </Grid>
-                      </StyledGrid>
+                    {!list && <MainCard>
+                      <Grid container spacing={1}>
 
-                      <NameAndFio
-                        disable={objDis.disable}
-                        typeUL={objDis.typeUl}
-                        insertkey={key}
-                        component={StyledTextField}
-                      />
+                        {DEFAULT_OBJECT_VALIDATE[nameFieldArray].map(item => {
+                          const { value } = fields
+                          const fio = ['lastname', 'firstname', 'patronymic']
+                          let sm = 12
+                          let showUL = (value[index]['inn'].length === 12) ? false : true
+                          let showField = true
+                          if (fio.indexOf(item) !== -1) sm = 4
+                          if (item === 'kpp' || item === 'inn') sm = (item === 'inn' && !showUL) ? 12 : 6
 
-                      {!(type === "Client" && activeStep === 1) && (
-                        <StyledGrid item xs={12} sm={12}>
-                          <Field
-                            disabled={objDis.disable}
-                            required={
-                              type === "Operator" && activeStep === 1
-                                ? false
-                                : !objDis.disable
-                            }
-                            fullWidth
-                            component={StyledTextField}
-                            label="Идентификатор"
-                            name={`${key}.id`}
-                            parse={parse}
-                          />
-                        </StyledGrid>
-                      )}
-                      {objDis.number && (
-                        <StyledGrid item xs={12} sm={12}>
-                          <Field
-                            disabled={objDis.disable}
-                            required={!objDis.disable}
-                            fullWidth
-                            component={StyledTextField}
-                            label="Номер заявки"
-                            name={`${key}.number`}
-                            parse={formatStringByPattern("999999")}
-                          />
-                        </StyledGrid>
-                      )}
-                      {activeStep === 0 && type === "Client" && (
-                        <StyledGrid item xs={12} sm={12}>
-                          <Field
-                            disabled={objDis.disable}
-                            required={!objDis.disable}
-                            fullWidth
-                            component={StyledTextField}
-                            label="E-mail"
-                            name={`${key}.email`}
-                          />
-                        </StyledGrid>
-                      )}
-                      {type === "Client" && activeStep === 1 && (
-                        <StyledGrid item xs={12} sm={12}>
-                          <Field
-                            disabled={objDis.disable}
-                            required={!objDis.disable}
-                            name={`${key}.operator`}
-                            label="Выберете оператора"
-                            component={Select}
-                            formControlProps={{ fullWidth: true }}
-                          >
-                            {OPERATORS.map(option => (
-                              <MenuItem key={option.value} value={option.value}>
-                                {option.label}
-                              </MenuItem>
-                            ))}
-                          </Field>
-                        </StyledGrid>
-                      )}
+                          showField = (item === 'name' && !showUL) ? false : showField
+                          showField = ((fio.indexOf(item) !== -1) && showUL) ? false : showField
+                          showField = (item === 'kpp' && !showUL) ? false : showField
 
-                      {!(type === "Client" && activeStep === 0) && (
-                        <StyledIconButton
-                          disabled={but.deleteDisable}
-                          onClick={() => {
-                            if (fields.length > 1)
-                              mutatorsFinalForm.remove(nameFieldArray, index);
-                          }}
-                        >
-                          <DeleteOutlined color={but.deleteColor} />
-                        </StyledIconButton>
-                      )}
-                    </MainCard>
+                          return (
+                            <>
+                              {showField && <Grid item xs={12} sm={sm}>
+                                {item !== 'operator' && <DefaultField
+                                  label={NAMED_FIELD[item]}
+                                  name={item}
+                                  nameFieldArray={nameFieldArray}
+                                  indexKey={key}
+                                />}
+                                {item === 'operator' && <DefaultSelect
+                                  label={NAMED_FIELD[item]}
+                                  name={item}
+                                  nameFieldArray={nameFieldArray}
+                                  indexKey={key}
+                                />}
+                              </Grid>}
+                            </>
+                          )
+                        })}
+                      </Grid>
+                      <ButtonDeleteField nameFieldArray={nameFieldArray} index={index} length={fields.length} />
+                    </MainCard>}
+                    {list && <ParseFile file={list} />}
                   </>
                 );
               })}
 
-              <GridButton container>
+              {/* <GridButton container>
                 {!(type === "Client" && activeStep === 0) && (
                   <Button
                     variant="outlined"
@@ -273,7 +187,7 @@ class StepContents extends Component {
                     color="primary"
                   />
                 )}
-              </GridButton>
+              </GridButton>*/}
             </>
           )}
         </FieldArray>

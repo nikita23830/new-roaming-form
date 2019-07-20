@@ -24,6 +24,7 @@ import ArrowDownwardIcon from "@material-ui/icons/ArrowDownward";
 
 import { DefaultStepper } from 'Components/Stepper'
 import { ButtonNavigate } from 'Components/Button/ButtonNavigate'
+import { DefaultModal } from 'Components/Modal'
 
 class Client extends Component {
   state = {
@@ -52,7 +53,7 @@ class Client extends Component {
       name === "Client" ? [...STEP_CLIENT] : [...STEP_OPERATOR];
     let valid = false;
     if (finalformApi) valid = finalformApi.getState().valid;
-    if (finalformApi) console.log(finalformApi.getState());
+    // if (finalformApi) console.log(finalformApi.getState());
     return (
       <MainCard>
 
@@ -64,8 +65,6 @@ class Client extends Component {
               activeStep={activeStep}
               type={name}
               handleModalOpen={this.handleModalOpen}
-              finalformApi={finalformApi}
-              showSnackbar={showSnackbar}
             />
           )}
 
@@ -95,34 +94,7 @@ class Client extends Component {
           handleSend={this.handleSend}
         />
 
-
-        <Modal open={openModalFile} onClose={this.handleModalClose}>
-          <ModalDiv>
-            <StyledIconButton
-              aria-label="Close"
-              onClick={this.handleModalClose}
-            >
-              <CancelOutlined color="primary" />
-            </StyledIconButton>
-
-            <Typography variant="subtitle1">
-              Вы можете загрузить список контрагентов файлом с форматом .xls или
-              xlsx, если он сопоставим с шаблоном:
-            </Typography>
-            <Button
-              variant="outlined"
-              color="primary"
-              href="https://astral.ru/roaming/tempalates/abonent-receiver.xlsx"
-            >
-              <ArrowDownwardIcon />
-              Загрузить шаблон
-            </Button>
-            <Typography variant="subtitle1">
-              Обращаем Ваше внимание, что загрузка списка контрагентов файлом
-              удалит введеные вручную данные контрагентов!
-            </Typography>
-          </ModalDiv>
-        </Modal>
+        <DefaultModal openModalFile={openModalFile} handleModalClose={this.handleModalClose} />
       </MainCard>
     );
   }

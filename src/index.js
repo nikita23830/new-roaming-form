@@ -23,7 +23,7 @@ const theme = createMuiTheme({
 });
 
 render(
-  <SnackbarProvider maxSnack={3}>
+  <SnackbarProvider maxSnack={5}>
     <MuiThemeProvider theme={theme}>
       <FinalForm />
     </MuiThemeProvider>

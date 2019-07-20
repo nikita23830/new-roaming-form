@@ -29,7 +29,7 @@ class FinalForm extends Component {
         }}
         render={({ handleSubmit, reset, submitting, pristine, values, form, errors, touched }) => {
           const { change, mutators } = form;
-
+          console.log(errors)
           return (
             <DataProvider value={{ formApi: this.formApi, mutators: mutators }}>
               <App values={values} mutators={mutators} formApi={this.formApi} />

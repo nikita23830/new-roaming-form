@@ -5,13 +5,14 @@ import { Grid, Button } from '@material-ui/core'
 export const ButtonNavigate = ({ activeStep, handleBack, handleNext, handleSend }) => (
   <StyledGrid container>
     <BtnGrid item xs={12} sm={6} align='flex-start'>
-      {(activeStep === 0) && <Button
+      <Button
         variant="outlined"
         color="primary"
+        disabled={activeStep === 0 ? true : false}
         onClick={activeStep === 0 ? null : handleBack}
       >
         Назад
-      </Button>}
+      </Button>
     </BtnGrid>
     <BtnGrid item xs={12} sm={6} align='flex-end'>
       <Button

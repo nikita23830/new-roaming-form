@@ -15,46 +15,35 @@ export const STEP = {
   Operator: [...STEP_OPERATOR]
 }
 
-export const DEFAULT_SENDER_CLIENT = {
-  id: '',
+const DEFAULT_OBJECT = {
   inn: '',
   kpp: '',
   name: '',
   lastname: '',
   firstname: '',
   patronymic: '',
+}
+
+export const DEFAULT_SENDER_CLIENT = {
+  ...DEFAULT_OBJECT,
+  id: '',
   email: '',
 }
 
 export const DEFAULT_RECEIVER_CLIENT = {
-  inn: '',
-  kpp: '',
-  name: '',
-  lastname: '',
-  firstname: '',
-  patronymic: '',
+  ...DEFAULT_OBJECT,
   operator: '',
 }
 
 export const DEFAULT_SENDER_OPERATOR = {
+  ...DEFAULT_OBJECT,
   id: '',
-  inn: '',
-  kpp: '',
-  name: '',
-  lastname: '',
-  firstname: '',
-  patronymic: '',
   number: '',
 }
 
 export const DEFAULT_RECEIVER_OPERATOR = {
+  ...DEFAULT_OBJECT,
   id: '',
-  inn: '',
-  kpp: '',
-  name: '',
-  lastname: '',
-  firstname: '',
-  patronymic: '',
 }
 
 export const OPERATORS = [
@@ -106,4 +95,17 @@ export const DEFAULT_OBJECT_VALIDATE = {
   senderOperator: [...Object.keys(DEFAULT_SENDER_OPERATOR)],
   receiverClient: [...Object.keys(DEFAULT_RECEIVER_CLIENT)],
   receiverOperator: [...Object.keys(DEFAULT_RECEIVER_OPERATOR)]
+}
+
+export const NAMED_FIELD = {
+  inn: 'ИНН',
+  kpp: 'КПП',
+  name: 'Название организации',
+  lastname: 'Фамилия',
+  firstname: 'Имя',
+  patronymic: 'Отчество',
+  email: 'E-mail',
+  id: 'Идентификатор',
+  operator: 'Выберите оператора',
+  number: 'Номер заявки',
 }
