@@ -17,12 +17,11 @@ export const DefaultStepper = ({ activeStep, handleStep, steps, type }) => (
             const labelProps = { error: false }
             const stepProps = {}
             if (context && context.formApi) {
-              const { values, errors } = context.formApi.getState()
+              const { errors } = context.formApi.getState()
               const arrErrors = Object.keys(errors)
               const nameField = `${index === 0 ? 'sender' : (index === 1 ? 'receiver' : null)}${type}`
-              const fileList = values[`${index === 0 ? 'sender' : (index === 1 ? 'receiver' : null)}${type}file`]
-              labelProps.error = (!fileList && arrErrors.indexOf(nameField) !== -1) ? true : false
-              labelProps.StepIconProps = (!fileList && arrErrors.indexOf(nameField) !== -1)
+              labelProps.error = arrErrors.indexOf(nameField) !== -1 ? true : false
+              labelProps.StepIconProps = arrErrors.indexOf(nameField) !== -1
                 ? { icon: <ErrorOutline color='secondary' /> } : null
               stepProps.completed = (!labelProps.error && index < 2) ? true : false
             }

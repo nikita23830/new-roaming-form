@@ -25,6 +25,8 @@ import {
 import { mayShow } from '../Utils'
 import { withSnackbar } from 'notistack';
 
+import { ExpansionError } from 'Components/Expansion/Error'
+
 class Summary extends Component {
 
   chipDeleteFile = (index) => () => {
@@ -77,28 +79,7 @@ class Summary extends Component {
 
     return (
       <>
-        {showErrors && <ExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMore color='secondary'/>}>
-            <StyledTypography>Некорретные данные</StyledTypography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-            <StyledDiv>
-              <Typography>Некорретные или неполные данные. Перейдите на нужный этап для исправления ошибок.</Typography>
-              {(!showSender && !files[0]) && <Grid item sm={12} sx={4}>
-                <StyledButton variant="outlined" aria-label="Delete" color='primary' onClick={handleStep(0)} >
-                  {STEP[type][0]}
-                  <Send color='primary' />
-                </StyledButton>
-              </Grid>}
-              {(!showReceiver && !files[1]) && <Grid item sm={12} sx={4}>
-                <StyledButton variant="outlined" aria-label="Delete" color='primary' onClick={handleStep(1)} >
-                  {STEP[type][1]}
-                  <Send color='primary' />
-                </StyledButton>
-              </Grid>}
-            </StyledDiv>
-          </ExpansionPanelDetails>
-        </ExpansionPanel>}
+        <ExpansionError type={type} handleStep={handleStep} />
 
         {showSender && <Typography variant="h6">{STEP[type][0]}</Typography>}
         {showSender && objSender.map(item => (

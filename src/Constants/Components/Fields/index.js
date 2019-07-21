@@ -23,7 +23,7 @@ export const PARSE_FIELD = {
 }
 
 export const VALIDATE_FIELD = {
-  id: composeValidators(required, checkGuid, mustBeLenght([39])),
+  senderClient: composeValidators(required, checkGuid, mustBeLenght([39])),
   senderOperator: composeValidators(required, mustBeLenght([39])),
   receiverOperator: composeValidators(checkGuid, mustBeLenght([39])),
   inn: composeValidators(required, mustBeLenght([10, 12])),
@@ -36,5 +36,3 @@ export const VALIDATE_FIELD = {
   number: composeValidators(required, mustBeLenght([6])),
   operator: composeValidators(required)
 }
-
-// idKontr - так как поле не обязательное (c) Даша
