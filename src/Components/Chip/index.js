@@ -10,7 +10,7 @@ export const DefaultChip = ({ nameField, handleDeleteFile, file }) => (
     let finalformApi = undefined
     if (context && context.formApi) finalformApi = context.formApi
     return (
-      <Chip
+      <StyleChip
         avatar={
           <StyledAvatar>
             <AttachFileRounded color="primary" />
@@ -36,4 +36,8 @@ const Styledp = styled.p` && {
 const StyledAvatar = styled(Avatar)` && {
   background-color: #fff;
   border: 1px solid #6a1b9a;
+}`
+
+const StyleChip = styled(Chip)` && {
+  margin-right: 5px;
 }`

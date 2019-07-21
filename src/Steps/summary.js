@@ -26,27 +26,16 @@ import { mayShow } from '../Utils'
 import { withSnackbar } from 'notistack';
 
 import { ExpansionError } from 'Components/Expansion/Error'
+import { ExpansionData } from 'Components/Expansion'
+import { ExpansionFiles } from 'Components/Expansion/Files'
+import { showSnackbar } from 'Utils/Snackbar'
 
 class Summary extends Component {
 
-  chipDeleteFile = (index) => () => {
-    const { finalformApi, valuesFinalForm, type } = this.props
-    const nameFields = { sender: `sender${type}`, receiver: `receiver${type}` }
-    const files = [
-      `${nameFields.sender}file`,
-      `${nameFields.receiver}file`,
-      `${type}file`
-    ]
-    finalformApi.change(files[index], undefined)
-    this.props.enqueueSnackbar('Файл удален успешно', {
-      variant: 'success',
-      persist: true,
-      action: (key) => (
-        <IconButton onClick={() => { this.props.closeSnackbar(key) }}>
-          <DeleteOutline />
-        </IconButton>
-      )
-    })
+  chipDeleteFile = ({ finalformApi, nameField }) => () => {
+    const { enqueueSnackbar, closeSnackbar } = this.props
+    finalformApi.change(nameField, undefined)
+    showSnackbar({ enqueueSnackbar, text: 'Файл удален успешно', variant: 'success', closeSnackbar })
   }
 
   render () {
@@ -80,99 +69,12 @@ class Summary extends Component {
     return (
       <>
         <ExpansionError type={type} handleStep={handleStep} />
-
-        {showSender && <Typography variant="h6">{STEP[type][0]}</Typography>}
-        {showSender && objSender.map(item => (
-          <StyleListExpansionPanel>
-            <ExpansionPanelSummary expandIcon={<ExpandMore color='primary'/>}>
-              <Typography>{item.name}</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Table>
-                <CustomTableBody item={item} />
-              </Table>
-            </ExpansionPanelDetails>
-          </StyleListExpansionPanel>
-        ))}
-
-        {showFiles && <Typography variant="h6">Прикрепленные файлы</Typography>}
-        {showFiles && <StyleListExpansionPanel>
-          <ExpansionPanelSummary expandIcon={<ExpandMore color='primary'/>}>
-            <Typography>Файлов: {collFiles}</Typography>
-          </ExpansionPanelSummary>
-          <ExpansionPanelDetails>
-
-          {showFiles && files.map((item, index) => (
-            <>
-              {item && <StyledChip
-                avatar={
-                  <StyledAvatar>
-                    <AttachFileRounded color='primary' />
-                  </StyledAvatar>
-                }
-                label={
-                  <Styledp>
-                    {item.name}
-                  </Styledp>
-                }
-                variant='outlined'
-                onDelete={this.chipDeleteFile(index)}
-                color='primary'
-              />}
-            </>
-          ))}
-
-          </ExpansionPanelDetails>
-        </StyleListExpansionPanel>}
-
-        {showReceiver && <Typography variant="h6">{STEP[type][1]}</Typography>}
-        {showReceiver && objReceiver.map(item => (
-          <StyleListExpansionPanel>
-            <ExpansionPanelSummary expandIcon={<ExpandMore color='primary'/>}>
-              <Typography>{item.name}</Typography>
-            </ExpansionPanelSummary>
-            <ExpansionPanelDetails>
-              <Table>
-                <CustomTableBody item={item} />
-              </Table>
-            </ExpansionPanelDetails>
-          </StyleListExpansionPanel>
-        ))}
+        <ExpansionData type={type} step='sender' />
+        <ExpansionData type={type} step='receiver' />
+        <ExpansionFiles type={type} handleDeleteFile={this.chipDeleteFile} />
       </>
     )
   }
-}
-
-const CustomTableBody = ({ item }) => {
-
-  return (
-    <TableBody>
-      {item.inn && <TableRow hover={true}>
-        <TableCell align="left">ИНН</TableCell>
-        <TableCell align="right">{item.inn}</TableCell>
-      </TableRow>}
-      {item.kpp && <TableRow>
-        <TableCell align="left">КПП</TableCell>
-        <TableCell align="right">{item.kpp}</TableCell>
-      </TableRow>}
-      {item.id && <TableRow>
-        <TableCell align="left">Идентификатор</TableCell>
-        <TableCell align="right">{item.id}</TableCell>
-      </TableRow>}
-      {item.operator && <TableRow>
-        <TableCell align="left">Оператор</TableCell>
-        <TableCell align="right">{item.operator}</TableCell>
-      </TableRow>}
-      {item.email && <TableRow>
-        <TableCell align="left">E-mail</TableCell>
-        <TableCell align="right">{item.email}</TableCell>
-      </TableRow>}
-      {item.number && <TableRow>
-        <TableCell align="left">Номер заявки</TableCell>
-        <TableCell align="right">{item.number}</TableCell>
-      </TableRow>}
-    </TableBody>
-  )
 }
 
 export default withSnackbar(Summary)

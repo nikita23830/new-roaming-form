@@ -10,6 +10,7 @@ import ParseFile from 'Components/ParseFile'
 import { DefaultStep } from 'Components/Step'
 import { ButtonBottomToolBox, ButtonDeleteField } from 'Components/Button'
 import { DataConsumer } from 'Utils/context'
+import { showSnackbar } from 'Utils/Snackbar'
 
 class StepContents extends Component {
   uploadFile = finalformApi => file => {
@@ -18,15 +19,7 @@ class StepContents extends Component {
 
     if (files.type === "application/pdf") {
       finalformApi.change(`${type}file`, files);
-    } else enqueueSnackbar('Файл должен иметь расширение .pdf', {
-      variant: 'warning',
-      persist: true,
-      action: (key) => (
-        <IconButton onClick={() => { closeSnackbar(key) }}>
-          <DeleteOutline />
-        </IconButton>
-      )
-    });
+    } else showSnackbar({ enqueueSnackbar, text: 'Файл должен иметь расширение .pdf', variant: 'warning', closeSnackbar })
   };
 
   handleDeleteFile = ({ finalformApi }) => () => finalformApi.change(`${this.props.type}file`, undefined);

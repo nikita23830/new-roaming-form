@@ -20,17 +20,18 @@ export const DefaultStepper = ({ activeStep, handleStep, steps, type }) => (
               const { errors } = context.formApi.getState()
               const arrErrors = Object.keys(errors)
               const nameField = `${index === 0 ? 'sender' : (index === 1 ? 'receiver' : null)}${type}`
-              labelProps.error = arrErrors.indexOf(nameField) !== -1 ? true : false
-              labelProps.StepIconProps = arrErrors.indexOf(nameField) !== -1
+              labelProps.error = (arrErrors.indexOf(nameField) !== -1 && index !== activeStep)
+                ? true : false
+              labelProps.StepIconProps = (arrErrors.indexOf(nameField) !== -1 && index !== activeStep)
                 ? { icon: <ErrorOutline color='secondary' /> } : null
-              stepProps.completed = (!labelProps.error && index < 2) ? true : false
+              stepProps.completed = (!labelProps.error && index < 2)
+                ? (index === activeStep ? false : true) : false
             }
 
             return (
               <Step key={label} error={true} {...stepProps}>
                 <StyledStepButton
                   onClick={handleStep(index)}
-                  style={{ margin: "-10px", padding: "10px 8px" }}
                 >
                   <StepLabel align="left" {...labelProps} >
                     {label}

@@ -28,8 +28,9 @@ import {
 } from "../Constants";
 
 import { DefaultChip } from 'Components/Chip'
-import { ButtonUpload, ButtonCloseSnackbar } from 'Components/Button'
+import { ButtonUpload } from 'Components/Button'
 import { DataConsumer } from 'Utils/context'
+import { showSnackbar } from 'Utils/Snackbar'
 
 
 class TypeUploadData extends Component {
@@ -48,24 +49,11 @@ class TypeUploadData extends Component {
     ];
 
     if (files.type === normal_type[0] || files.type === normal_type[1]) {
-      enqueueSnackbar("Список успешно загружен", {
-        variant: "success",
-        persist: true,
-        action: key => (
-          <ButtonCloseSnackbar close={closeSnackbar} key={key} />
-        )
-      });
+      showSnackbar({ enqueueSnackbar, text: 'Список успешно загружен', variant: 'success', closeSnackbar })
       finalformApi.change(`${nameField}file`, files);
       finalformApi.change(nameField, [{ ...DEFAULT_OBJECT[nameField] }]);
     } else
-      enqueueSnackbar('Файл должен иметь расширение ".xls" или ".xlsx"', {
-          variant: "error",
-          persist: true,
-          action: key => (
-            <ButtonCloseSnackbar close={closeSnackbar} key={key} />
-          )
-        }
-      );
+      showSnackbar({ enqueueSnackbar, text: 'Файл должен иметь расширение ".xls" или ".xlsx"', variant: 'warning', closeSnackbar })
   };
 
   handleDeleteFile = ({ finalformApi, nameField }) => () => finalformApi.change(nameField, undefined);
