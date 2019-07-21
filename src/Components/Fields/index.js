@@ -8,8 +8,7 @@ import { OPERATORS } from "Constants";
 export const DefaultField = ({ nameFieldArray, name, label, indexKey }) => (
   <Field
     parse={PARSE_FIELD[name]}
-    validate={(nameFieldArray === 'receiverOperator' && name === 'id')
-      ? VALIDATE_FIELD[`idKontr`] : VALIDATE_FIELD[name]}
+    validate={name === 'id' ? VALIDATE_FIELD[nameFieldArray] : VALIDATE_FIELD[name]}
     name={`${indexKey}.${name}`}
     label={label}
     fullWidth

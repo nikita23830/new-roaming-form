@@ -24,7 +24,8 @@ export const PARSE_FIELD = {
 
 export const VALIDATE_FIELD = {
   id: composeValidators(required, checkGuid, mustBeLenght([39])),
-  idKontr: composeValidators(checkGuid, mustBeLenght([39])),
+  senderOperator: composeValidators(required, mustBeLenght([39])),
+  receiverOperator: composeValidators(checkGuid, mustBeLenght([39])),
   inn: composeValidators(required, mustBeLenght([10, 12])),
   kpp: composeValidators(required, mustBeLenght([9])),
   name: composeValidators(required),
