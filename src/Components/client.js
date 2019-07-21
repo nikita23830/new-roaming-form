@@ -56,7 +56,7 @@ class Client extends Component {
     // if (finalformApi) console.log(finalformApi.getState());
     return (
       <MainCard>
-        <DefaultStepper activeStep={activeStep} handleStep={this.handleStep} steps={STEP_GLOBAL} />
+        <DefaultStepper activeStep={activeStep} handleStep={this.handleStep} steps={STEP_GLOBAL} type={name} />
         <Collapse in={activeStep === 0}>
           {!(activeStep === 0 && name === "Client") &&
             <TypeUploadData activeStep={0} type={name} handleModalOpen={this.handleModalOpen} />}
