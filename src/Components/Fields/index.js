@@ -8,11 +8,13 @@ import { OPERATORS } from "Constants";
 export const DefaultField = ({ nameFieldArray, name, label, indexKey }) => (
   <Field
     parse={PARSE_FIELD[name]}
-    validate={VALIDATE_FIELD[name]}
+    validate={(nameFieldArray === 'receiverOperator' && name === 'id')
+      ? VALIDATE_FIELD[`idKontr`] : VALIDATE_FIELD[name]}
     name={`${indexKey}.${name}`}
     label={label}
     fullWidth
-    required={(name !== 'patronymic') ? true : false}
+    required={(name === 'patronymic' || (nameFieldArray === 'receiverOperator'
+      && name === 'id')) ? false : true}
     component={StyledTextField}
   />
 )

@@ -24,11 +24,18 @@ const ButtonDeleteField = ({ nameFieldArray, index, length }) => (
 
 export const keyFramesButton = keyframes`
 0% {
-  transform: rotate(0);
-}
-100% {
-  transform: rotate(360deg);
-}
+    -webkit-transform: scale(1) rotateZ(0);
+            transform: scale(1) rotateZ(0);
+  }
+  50% {
+    -webkit-transform: scale(2) rotateZ(180deg);
+            transform: scale(2) rotateZ(180deg);
+  }
+  100% {
+    -webkit-transform: scale(1) rotateZ(360deg);
+            transform: scale(1) rotateZ(360deg);
+  }
+
 `
 
 const StyledIconButton = styled(IconButton)` && {
@@ -40,7 +47,7 @@ const StyledIconButton = styled(IconButton)` && {
 
 const StyledDeleteOutlined = styled(DeleteOutlined)` &:hover
 {
-  animation: ${keyFramesButton} 0.6s ease-in-out both;
+  animation: ${keyFramesButton} 0.4s linear both;
 }`;
 
 export default ButtonDeleteField

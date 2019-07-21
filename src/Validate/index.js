@@ -1,6 +1,6 @@
 export const required = value => (value ? undefined : "Обязательное поле");
 
-export const mustBeLenght = (arrLenght) => value => arrLenght.indexOf(value.length) === -1
+export const mustBeLenght = (arrLenght) => value => (value && arrLenght.indexOf(value.length) === -1)
   ? `Значение поля должно содержать ${arrLenght[0]} ${arrLenght[1] ? `или ${arrLenght[1]} ` : ''}символов`
   : undefined
 

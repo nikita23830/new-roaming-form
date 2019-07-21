@@ -56,26 +56,15 @@ class Client extends Component {
     // if (finalformApi) console.log(finalformApi.getState());
     return (
       <MainCard>
-
         <DefaultStepper activeStep={activeStep} handleStep={this.handleStep} steps={STEP_GLOBAL} />
-
-        <Collapse in={activeStep < 2}>
-          {!(activeStep === 0 && name === "Client") && (
-            <TypeUploadData
-              activeStep={activeStep}
-              type={name}
-              handleModalOpen={this.handleModalOpen}
-            />
-          )}
-
-          <StepContents
-            type={name}
-            activeStep={activeStep}
-            finalformApi={finalformApi}
-            valuesFinalForm={valuesFinalForm}
-            mutatorsFinalForm={mutatorsFinalForm}
-            showSnackbar={showSnackbar}
-          />
+        <Collapse in={activeStep === 0}>
+          {!(activeStep === 0 && name === "Client") &&
+            <TypeUploadData activeStep={0} type={name} handleModalOpen={this.handleModalOpen} />}
+          <StepContents type={name} activeStep={0} />
+        </Collapse>
+        <Collapse in={activeStep === 1}>
+          <TypeUploadData activeStep={1} type={name} handleModalOpen={this.handleModalOpen} />
+          <StepContents type={name} activeStep={1} />
         </Collapse>
         <Collapse in={activeStep === 2}>
           <Summary
