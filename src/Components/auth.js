@@ -15,7 +15,7 @@ import { DataConsumer } from 'Utils/context'
 class Auth extends Component {
   state = {
     openAuth: false,
-    openStep: true,
+    openStep: false,
     activeStep: 0,
   }
 
@@ -44,6 +44,7 @@ class Auth extends Component {
       text: 'Сервер временно не доступен. Повторите позднее', variant: 'error', closeSnackbar })
     else {
       if (data.status === 401) this.setState({ openAuth: true, openStep: false })
+      if (data.status !== 401) this.setState({ openAuth: false, openStep: true })
     }
   }
 
