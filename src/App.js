@@ -45,7 +45,7 @@ const getStepContent = ({ activePage, values, mutators, formApi }) => {
     case 0:
       return (
         <Client
-          name="Client"
+          name="Abonent"
           finalformApi={formApi}
           valuesFinalForm={values}
           mutatorsFinalForm={mutators}

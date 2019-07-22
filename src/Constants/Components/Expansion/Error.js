@@ -11,6 +11,6 @@ export const STEP_CLIENT = [
 ]
 
 export const STEP = {
-  Client: [...STEP_CLIENT],
+  Abonent: [...STEP_CLIENT],
   Operator: [...STEP_OPERATOR]
 }

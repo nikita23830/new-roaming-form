@@ -30,8 +30,8 @@ export const DEFAULT_RECEIVER_OPERATOR = {
 }
 
 export const COMMON_OBJECT = {
-  senderClient: {...DEFAULT_SENDER_CLIENT},
+  senderAbonent: {...DEFAULT_SENDER_CLIENT},
   senderOperator: {...DEFAULT_SENDER_OPERATOR},
-  receiverClient: {...DEFAULT_RECEIVER_CLIENT},
+  receiverAbonent: {...DEFAULT_RECEIVER_CLIENT},
   receiverOperator: {...DEFAULT_RECEIVER_OPERATOR}
 }

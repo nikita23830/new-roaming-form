@@ -48,9 +48,8 @@ class Client extends Component {
     if (!valid) {
       showSnackbar({ enqueueSnackbar, text: 'Допущены ошибки при заполнении', variant: 'warning', closeSnackbar })
       this.setState({ activeStep: errors[`sender${name}`] ? 0 : 1 });
-      finalformApi.submit()
     }
-
+    finalformApi.submit()
   };
 
   render() {
@@ -63,7 +62,7 @@ class Client extends Component {
       showSnackbar
     } = this.props;
     const STEP_GLOBAL =
-      name === "Client" ? [...STEP_CLIENT] : [...STEP_OPERATOR];
+      name === "Abonent" ? [...STEP_CLIENT] : [...STEP_OPERATOR];
     let valid = false;
     if (finalformApi) valid = finalformApi.getState().valid;
     // if (finalformApi) console.log(finalformApi.getState());
@@ -76,7 +75,7 @@ class Client extends Component {
           <MainCard>
             <DefaultStepper activeStep={activeStep} handleStep={this.handleStep} steps={STEP_GLOBAL} type={name} />
             <Collapse in={activeStep === 0}>
-              {!(activeStep === 0 && name === "Client") &&
+              {!(activeStep === 0 && name === "Abonent") &&
                 <TypeUploadData activeStep={0} type={name} handleModalOpen={this.handleModalOpen} />}
               <StepContents type={name} activeStep={0} />
             </Collapse>

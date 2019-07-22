@@ -13,12 +13,12 @@ const ButtonBottomToolBox = ({activeStep, nameFieldArray, length, uploadFile, ha
       <GridButton container>
         <ButtonAddField activeStep={activeStep} nameFieldArray={nameFieldArray} length={length} />
 
-        {!checkFile && nameFieldArray === 'receiverClient' && <ButtonUpload
+        {!checkFile && nameFieldArray === 'receiverAbonent' && <ButtonUpload
           accept='.pdf'
           uploadFile={uploadFile}
           text='Загрузить доп. соглашение'
         />}
-        {checkFile && nameFieldArray === 'receiverClient' && <DefaultChip
+        {checkFile && nameFieldArray === 'receiverAbonent' && <DefaultChip
           nameField={undefined}
           handleDeleteFile={handleDeleteFile}
           file={checkFile}

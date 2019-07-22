@@ -9,7 +9,7 @@ const ButtonAddField = ({ activeStep, nameFieldArray, length }) => (
     let push = undefined
     if (context && context.mutators) push = context.mutators.push
     let dataInsert = COMMON_OBJECT[nameFieldArray]
-    let visible = ((nameFieldArray === 'senderClient') || length > 99) ? false : true
+    let visible = ((nameFieldArray === 'senderAbonent') || length > 99) ? false : true
     return (
       <>
         {visible && <Button

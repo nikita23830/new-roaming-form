@@ -11,7 +11,7 @@ export const STEP_CLIENT = [
 ]
 
 export const STEP = {
-  Client: [...STEP_CLIENT],
+  Abonent: [...STEP_CLIENT],
   Operator: [...STEP_OPERATOR]
 }
 
@@ -91,9 +91,9 @@ export const EXPANSION = [
 ]
 
 export const DEFAULT_OBJECT_VALIDATE = {
-  senderClient: [...Object.keys(DEFAULT_SENDER_CLIENT)],
+  senderAbonent: [...Object.keys(DEFAULT_SENDER_CLIENT)],
   senderOperator: [...Object.keys(DEFAULT_SENDER_OPERATOR)],
-  receiverClient: [...Object.keys(DEFAULT_RECEIVER_CLIENT)],
+  receiverAbonent: [...Object.keys(DEFAULT_RECEIVER_CLIENT)],
   receiverOperator: [...Object.keys(DEFAULT_RECEIVER_OPERATOR)]
 }
 

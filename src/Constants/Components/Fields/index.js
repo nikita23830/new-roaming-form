@@ -23,7 +23,7 @@ export const PARSE_FIELD = {
 }
 
 export const VALIDATE_FIELD = {
-  senderClient: composeValidators(required, checkGuid, mustBeLenght([39])),
+  senderAbonent: composeValidators(required, checkGuid, mustBeLenght([39])),
   senderOperator: composeValidators(required, mustBeLenght([39])),
   receiverOperator: composeValidators(checkGuid, mustBeLenght([39])),
   inn: composeValidators(required, mustBeLenght([10, 12])),
