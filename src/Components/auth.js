@@ -8,17 +8,43 @@ import { Field } from "react-final-form";
 import { StyledCollapse, AuthCard, StyledTextField,  StyledCollapseClient } from '../StyledComponents/components/auth/'
 
 import Client from './client'
-
+import { axiosAPI } from 'Utils/axios'
+import { withSnackbar } from "notistack";
+import { showSnackbar } from 'Utils/Snackbar'
+import { DataConsumer } from 'Utils/context'
 class Auth extends Component {
   state = {
-    openAuth: true,
-    openStep: false,
+    openAuth: false,
+    openStep: true,
     activeStep: 0,
   }
 
+  auth = formApi => async () => {
+    const { enqueueSnackbar, closeSnackbar } = this.props
+    const { values } = formApi.getState()
+    var dataForm = new FormData();
+    dataForm.set('login', values.login );
+    dataForm.set('password', values.password );
+    const { status, data } = await axiosAPI({ path: 'auth', dataAxios: dataForm })
+    if (status !== 200) showSnackbar({ enqueueSnackbar,
+      text: 'Сервер временно не доступен. Повторите позднее', variant: 'error', closeSnackbar })
+    else {
+      if (data.status !== 0) showSnackbar({ enqueueSnackbar, text: data.text, variant: 'warning', closeSnackbar })
+      else {
+        showSnackbar({ enqueueSnackbar, text: 'Успешная авторизация', variant: 'success', closeSnackbar })
+        this.setState({ openAuth: false, openStep: true })
+      }
+    }
+  }
+
   async componentDidMount() {
-    // const auth = await axiosAPI({ path: 'operator' })
-    this.setState({ openAuth: false, openStep: true })
+    const { enqueueSnackbar, closeSnackbar } = this.props
+    const { status, data } = await axiosAPI({ path: 'operator' })
+    if (status !== 200) showSnackbar({ enqueueSnackbar,
+      text: 'Сервер временно не доступен. Повторите позднее', variant: 'error', closeSnackbar })
+    else {
+      if (data.status === 401) this.setState({ openAuth: true, openStep: false })
+    }
   }
 
   handleStep = index => () =>  this.setState({ activeStep: index })
@@ -28,7 +54,12 @@ class Auth extends Component {
     const { finalformApi, valuesFinalForm, mutatorsFinalForm, showSnackbar } = this.props
 
     return (
-      <>
+      <DataConsumer>
+      {context => {
+      let formApi = undefined
+      if (context && context.formApi) formApi = context.formApi
+      return (
+        <>
         <StyledCollapse in={openAuth}>
           <AuthCard>
             <Typography variant="h6">Авторизация спецоператора</Typography>
@@ -52,7 +83,7 @@ class Auth extends Component {
             <Button
               variant="outlined"
               color="primary"
-              type='submit'
+              onClick={this.auth(formApi)}
             >
               Войти
             </Button>
@@ -69,9 +100,12 @@ class Auth extends Component {
           />
 
         </StyledCollapseClient>
-      </>
+        </>
+      )
+      }}
+      </DataConsumer>
     )
   }
 };
 
-export default Auth
+export default withSnackbar(Auth)

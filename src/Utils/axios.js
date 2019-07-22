@@ -1,4 +1,5 @@
 import axios from 'axios'
+axios.defaults.withCredentials = true;
 
 export const axiosAPI = async props => {
   const { path, dataAxios } = props
@@ -12,8 +13,9 @@ export const axiosAPI = async props => {
     data: dataAxios
   })
   let result = {
-    status: status !== 200 ? status : data.status
+    status: status,
+    data: data,
   }
 
-  return await result.status
+  return await result
 }

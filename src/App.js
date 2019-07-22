@@ -41,6 +41,7 @@ class App extends Component {
 }
 
 const getStepContent = ({ activePage, values, mutators, formApi }) => {
+  if (formApi) formApi.change('active', activePage)
   switch (activePage) {
     case 0:
       return (

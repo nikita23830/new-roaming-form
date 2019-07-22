@@ -54,7 +54,7 @@ export const StyledCollapse = styled(Collapse)`
   && {
     margin-top: 10px;
     width: 100%;
-    height: 500px;
+    height: 100px;
     display: flex;
     justify-content: center;
     align-items: center;
