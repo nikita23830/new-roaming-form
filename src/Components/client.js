@@ -45,8 +45,9 @@ class Client extends Component {
   handleNext = () => this.setState({ activeStep: this.state.activeStep + 1 });
 
   resetForm = formApi => () => {
-    const { enqueueSnackbar, closeSnackbar } = this.props
+    const { enqueueSnackbar, closeSnackbar, name } = this.props
     formApi.reset();
+    formApi.change(name, undefined)
     this.setState({ activeStep: 0 });
     showSnackbar({ enqueueSnackbar, text: 'Форма очищена', variant: 'success', closeSnackbar })
   }
@@ -86,11 +87,12 @@ class Client extends Component {
           showSnackbar({ enqueueSnackbar,
             text: 'Данные успешно отправлены', variant: 'success', closeSnackbar })
           this.setState({ activeStep: 3 })
+          finalformApi.change(name, 3)
         }
       }
       this.setState({ loader: false })
     }
-  };  
+  };
 
   render() {
     const { activeStep, openModalFile, loader } = this.state;
@@ -110,25 +112,30 @@ class Client extends Component {
       <DataConsumer>
       {context => {
         let finalformApi = undefined
-        if (context && context.formApi) finalformApi = context.formApi
+        let step = undefined
+        if (context && context.formApi) {
+          finalformApi = context.formApi
+          const { values } = finalformApi.getState()
+          step = values[name] ? values[name] : activeStep
+        }
         return (
           <MainCard>
-            {activeStep < 3 && <DefaultStepper
+            {step < 3 && <DefaultStepper
               activeStep={activeStep}
               handleStep={this.handleStep}
               steps={STEP_GLOBAL}
               type={name}
             />}
-            <Collapse in={activeStep === 0}>
+            <Collapse in={step === 0}>
               {!(activeStep === 0 && name === "Abonent") &&
                 <TypeUploadData activeStep={0} type={name} handleModalOpen={this.handleModalOpen} />}
               <StepContents type={name} activeStep={0} />
             </Collapse>
-            <Collapse in={activeStep === 1}>
+            <Collapse in={step === 1}>
               <TypeUploadData activeStep={1} type={name} handleModalOpen={this.handleModalOpen} />
               <StepContents type={name} activeStep={1} />
             </Collapse>
-            <Collapse in={activeStep === 2}>
+            <Collapse in={step === 2}>
               <Summary
                 type={name}
                 valuesFinalForm={valuesFinalForm}
@@ -137,11 +144,11 @@ class Client extends Component {
                 handleStep={this.handleStep}
               />
             </Collapse>
-            <Collapse in={activeStep === 3}>
+            <Collapse in={step === 3}>
               <Complete type={name} reset={this.resetForm} />
             </Collapse>
 
-            {activeStep < 3 && <ButtonNavigate
+            {step < 3 && <ButtonNavigate
               activeStep={activeStep}
               handleBack={this.handleBack}
               handleNext={this.handleNext}

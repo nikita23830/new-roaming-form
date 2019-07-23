@@ -1,4 +1,5 @@
 import React from 'react'
+import styled from 'styled-components'
 import { MenuItem, Select, InputLabel, FormControl, FormHelperText } from '@material-ui/core'
 import { Field } from "react-final-form";
 import { DataConsumer } from 'Utils/context'
@@ -26,12 +27,12 @@ export const DefaultSelect = ({ nameFieldArray, name, label, indexKey }) => (
             let textError = (meta.error && meta.touched) ? meta.error : ''
             return (
               <>
-                <FormControl fullWidth>
+                <StyledFormControl fullWidth>
                   <InputLabel htmlFor="operator-select" error={booleanError}>{label}</InputLabel>
                   <Select
                     {...input}
                     inputProps={{
-                      name: 'operator',
+                      name: `${indexKey}.${name}`,
                       id: 'operator-select',
                     }}
                     fullWidth
@@ -50,7 +51,7 @@ export const DefaultSelect = ({ nameFieldArray, name, label, indexKey }) => (
                     ))}
                   </Select>
                   <FormHelperText error={booleanError}>{textError}</FormHelperText>
-                </FormControl>
+                </StyledFormControl>
               </>
             )
           }}
@@ -59,3 +60,7 @@ export const DefaultSelect = ({ nameFieldArray, name, label, indexKey }) => (
     }}
   </DataConsumer>
 )
+
+const StyledFormControl = styled(FormControl)` && {
+  margin-bottom: 16px;
+}`;

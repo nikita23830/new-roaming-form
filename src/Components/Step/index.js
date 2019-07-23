@@ -13,7 +13,7 @@ export const DefaultStep = ({ nameFieldArray, fields, indexKey, index }) => (
         const { value } = fields
         const fio = ['lastname', 'firstname', 'patronymic']
         let sm = 12
-        let showUL = (value[index]['inn'].length === 12) ? false : true
+        let showUL = (value[index]['inn'] && value[index]['inn'].length === 12) ? false : true
         let showField = true
         if (fio.indexOf(item) !== -1) sm = 4
         if (item === 'kpp' || item === 'inn') sm = (item === 'inn' && !showUL) ? 12 : 6
@@ -30,6 +30,7 @@ export const DefaultStep = ({ nameFieldArray, fields, indexKey, index }) => (
                 name={item}
                 nameFieldArray={nameFieldArray}
                 indexKey={indexKey}
+                indexRff={index}
               />}
               {item === 'operator' && <DefaultSelect
                 label={NAMED_FIELD[item]}
