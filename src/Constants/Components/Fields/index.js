@@ -33,6 +33,6 @@ export const VALIDATE_FIELD = {
   firstname: composeValidators(required),
   patronymic: null,
   email: composeValidators(required, checkMail),
-  number: composeValidators(required, mustBeLenght([6])),
+  number: composeValidators(mustBeLenght([6])),
   operator: composeValidators(required)
 }

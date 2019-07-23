@@ -13,7 +13,7 @@ export const DefaultField = ({ nameFieldArray, name, label, indexKey }) => (
     label={label}
     fullWidth
     required={(name === 'patronymic' || (nameFieldArray === 'receiverOperator'
-      && name === 'id')) ? false : true}
+      && name === 'id') || name === 'number') ? false : true}
     component={StyledTextField}
   />
 )

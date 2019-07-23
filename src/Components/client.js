@@ -27,6 +27,7 @@ import { DefaultStepper } from 'Components/Stepper'
 import { ButtonNavigate } from 'Components/Button'
 import { DefaultModal } from 'Components/Modal'
 import { DataConsumer } from 'Utils/context'
+import { Complete } from 'Components/Step/Complete'
 import { showSnackbar } from 'Utils/Snackbar'
 import { axiosAPI } from 'Utils/axios'
 
@@ -42,6 +43,13 @@ class Client extends Component {
   handleModalOpen = () => this.setState({ openModalFile: true });
   handleBack = () => this.setState({ activeStep: this.state.activeStep - 1 });
   handleNext = () => this.setState({ activeStep: this.state.activeStep + 1 });
+
+  resetForm = formApi => () => {
+    const { enqueueSnackbar, closeSnackbar } = this.props
+    formApi.reset();
+    this.setState({ activeStep: 0 });
+    showSnackbar({ enqueueSnackbar, text: 'Форма очищена', variant: 'success', closeSnackbar })
+  }
 
   handleSend = finalformApi => async () => {
     const { errors, valid } = finalformApi.getState()
@@ -74,10 +82,15 @@ class Client extends Component {
       else {
         if (data.status !== 0) showSnackbar({ enqueueSnackbar,
           text: data.code ? data.code : data.text, variant: 'warning', closeSnackbar })
+        else {
+          showSnackbar({ enqueueSnackbar,
+            text: 'Данные успешно отправлены', variant: 'success', closeSnackbar })
+          this.setState({ activeStep: 3 })
+        }
       }
       this.setState({ loader: false })
     }
-  };
+  };  
 
   render() {
     const { activeStep, openModalFile, loader } = this.state;
@@ -100,7 +113,12 @@ class Client extends Component {
         if (context && context.formApi) finalformApi = context.formApi
         return (
           <MainCard>
-            <DefaultStepper activeStep={activeStep} handleStep={this.handleStep} steps={STEP_GLOBAL} type={name} />
+            {activeStep < 3 && <DefaultStepper
+              activeStep={activeStep}
+              handleStep={this.handleStep}
+              steps={STEP_GLOBAL}
+              type={name}
+            />}
             <Collapse in={activeStep === 0}>
               {!(activeStep === 0 && name === "Abonent") &&
                 <TypeUploadData activeStep={0} type={name} handleModalOpen={this.handleModalOpen} />}
@@ -119,14 +137,17 @@ class Client extends Component {
                 handleStep={this.handleStep}
               />
             </Collapse>
+            <Collapse in={activeStep === 3}>
+              <Complete type={name} reset={this.resetForm} />
+            </Collapse>
 
-            <ButtonNavigate
+            {activeStep < 3 && <ButtonNavigate
               activeStep={activeStep}
               handleBack={this.handleBack}
               handleNext={this.handleNext}
               handleSend={this.handleSend(finalformApi)}
               loader={loader}
-            />
+            />}
 
             <DefaultModal openModalFile={openModalFile} handleModalClose={this.handleModalClose} />
           </MainCard>
