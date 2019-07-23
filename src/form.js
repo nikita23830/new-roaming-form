@@ -16,33 +16,10 @@ class FinalForm extends Component {
     return unsubscribe;
   };
 
-  onSubmitFinalForm = async json => {
-    const { active, senderOperatorfile, receiverAbonentfile, receiverOperatorfile } = json
-    const { enqueueSnackbar, closeSnackbar } = this.props
-    let dataSend = {
-      sender: active === 0 ? json.senderAbonent : json.senderOperator,
-      receiver: active === 0 ? json.receiverAbonent : json.receiverOperator
-    }
-    var dataForm = new FormData();
-    dataForm.set("data", JSON.stringify(dataSend));
-    if (active === 0 && receiverAbonentfile) dataForm.append("receiver_list", receiverAbonentfile);
-    if (json.Abonentfile) dataForm.append("agreement", json.Abonentfile);
-    if (active === 1) {
-      if (senderOperatorfile) dataForm.append("sender_list", senderOperatorfile);
-      if (receiverOperatorfile) dataForm.append("receiver_list", receiverOperatorfile);
-    }
-
-    const { status, data } = await axiosAPI({ path: active === 0 ? 'abonent' : 'operator', dataAxios: dataForm })
-    if (status !== 200) showSnackbar({ enqueueSnackbar,
-      text: 'Сервер временно не доступен. Повторите позднее', variant: 'error', closeSnackbar })
-    else {
-      if (data.status === 1) showSnackbar({ enqueueSnackbar,
-        text: data.code ? data.code : data.text, variant: 'warning', closeSnackbar })
-    }
-
-  }
+  onSubmitFinalForm = async json => {}
 
   render () {
+
     return (
       <Form
         onSubmit={this.onSubmitFinalForm}

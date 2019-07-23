@@ -28,11 +28,13 @@ import { ButtonNavigate } from 'Components/Button'
 import { DefaultModal } from 'Components/Modal'
 import { DataConsumer } from 'Utils/context'
 import { showSnackbar } from 'Utils/Snackbar'
+import { axiosAPI } from 'Utils/axios'
 
 class Client extends Component {
   state = {
     activeStep: 0,
-    openModalFile: false
+    openModalFile: false,
+    loader: false,
   };
 
   handleStep = index => () => this.setState({ activeStep: index });
@@ -41,19 +43,44 @@ class Client extends Component {
   handleBack = () => this.setState({ activeStep: this.state.activeStep - 1 });
   handleNext = () => this.setState({ activeStep: this.state.activeStep + 1 });
 
-  handleSend = finalformApi => () => {
+  handleSend = finalformApi => async () => {
     const { errors, valid } = finalformApi.getState()
     const { enqueueSnackbar, closeSnackbar, name } = this.props
     const { activeStep } = this.state
+    finalformApi.submit()
     if (!valid) {
       showSnackbar({ enqueueSnackbar, text: 'Допущены ошибки при заполнении', variant: 'warning', closeSnackbar })
       this.setState({ activeStep: errors[`sender${name}`] ? 0 : 1 });
+    } else {
+      this.setState({ loader: true })
+      const { values } = finalformApi.getState()
+      const { active, senderOperatorfile, receiverAbonentfile, receiverOperatorfile } = values
+      let dataSend = {
+        sender: active === 0 ? values.senderAbonent : values.senderOperator,
+        receiver: active === 0 ? values.receiverAbonent : values.receiverOperator
+      }
+      var dataForm = new FormData();
+      dataForm.set("data", JSON.stringify(dataSend));
+      if (active === 0 && receiverAbonentfile) dataForm.append("receiver_list", receiverAbonentfile);
+      if (values.Abonentfile) dataForm.append("agreement", values.Abonentfile);
+      if (active === 1) {
+        if (senderOperatorfile) dataForm.append("sender_list", senderOperatorfile);
+        if (receiverOperatorfile) dataForm.append("receiver_list", receiverOperatorfile);
+      }
+
+      const { status, data } = await axiosAPI({ path: active === 0 ? 'abonent' : 'operator', dataAxios: dataForm })
+      if (status !== 200) showSnackbar({ enqueueSnackbar,
+        text: 'Сервер временно не доступен. Повторите позднее', variant: 'error', closeSnackbar })
+      else {
+        if (data.status !== 0) showSnackbar({ enqueueSnackbar,
+          text: data.code ? data.code : data.text, variant: 'warning', closeSnackbar })
+      }
+      this.setState({ loader: false })
     }
-    finalformApi.submit()
   };
 
   render() {
-    const { activeStep, openModalFile } = this.state;
+    const { activeStep, openModalFile, loader } = this.state;
     const {
       finalformApi,
       valuesFinalForm,
@@ -98,6 +125,7 @@ class Client extends Component {
               handleBack={this.handleBack}
               handleNext={this.handleNext}
               handleSend={this.handleSend(finalformApi)}
+              loader={loader}
             />
 
             <DefaultModal openModalFile={openModalFile} handleModalClose={this.handleModalClose} />
